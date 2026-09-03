@@ -1,15 +1,5 @@
-import React from 'react'
-import ScannerPage from './scanner/page'
+import HomePage from "./home/HomePage";
 
-const Page = () => {
-  return (
-    <main>
-      <h1>Landing page</h1>
-      <div>
-        <ScannerPage />
-      </div>
-    </main>
-  )
+export default function Page() {
+  return <HomePage />;
 }
-
-export default Page
