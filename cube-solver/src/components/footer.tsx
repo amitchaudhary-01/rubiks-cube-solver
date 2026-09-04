@@ -29,22 +29,22 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-blue-500 uppercase tracking-wider">App</h3>
             <ul className="mt-4 space-y-3 text-sm">
               <li>
-                <Link href="/#scanner" className="transition hover:text-white">
+                <Link href="/#scanner" className="transition hover:text-blue-400">
                   Scanner
                 </Link>
               </li>
               <li>
-                <Link href="/solver" className="transition hover:text-white">
+                <Link href="/solver" className="transition hover:text-blue-400">
                   Solver
                 </Link>
               </li>
               <li>
-                <Link href="/statistics" className="transition hover:text-white">
+                <Link href="/statistics" className="transition hover:text-blue-400">
                   Statistics
                 </Link>
               </li>
               <li>
-                <Link href="/history" className="transition hover:text-white">
+                <Link href="/history" className="transition hover:text-blue-400">
                   Solve History
                 </Link>
               </li>
@@ -56,17 +56,17 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-blue-500 uppercase tracking-wider">Account</h3>
             <ul className="mt-4 space-y-3 text-sm">
               <li>
-                <Link href="/login" className="transition hover:text-white">
+                <Link href="/login" className="transition hover:text-blue-400">
                   Login
                 </Link>
               </li>
               <li>
-                <Link href="/register" className="transition hover:text-white">
+                <Link href="/register" className="transition hover:text-blue-400">
                   Register
                 </Link>
               </li>
               <li>
-                <Link href="/forgot-password" className="transition hover:text-white">
+                <Link href="/forgot-password" className="transition hover:text-blue-400">
                   Forgot Password
                 </Link>
               </li>

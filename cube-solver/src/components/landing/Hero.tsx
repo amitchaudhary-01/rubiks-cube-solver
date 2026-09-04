@@ -29,13 +29,14 @@ export default function Hero() {
             step-by-step solution.
           </p>
 
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-7 flex flex-col gap-16 sm:flex-row">
             <Link
               href="/scanner"
-              className="rounded-lg bg-blue-600 px-5 py-3 text-center text-sm font-medium text-white hover:bg-blue-700"
+              className="rounded-lg bg-blue-600 px-5 py-3 text-center text-sm font-medium text-white hover:bg-blue-700 flex gap-3"
             >
-              Scan My Cube <MoveRight/>
-            </Link>
+              <span>Scan My Cube</span>
+              <MoveRight className="text-green-400"/>
+            </Link> 
 
             <Link
               href="#how-it-works"

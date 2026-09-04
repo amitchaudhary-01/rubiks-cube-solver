@@ -17,9 +17,9 @@ export default function CTA() {
 
         <Link
           href="/scanner"
-          className="mt-7 inline-flex rounded-lg bg-white px-5 py-3 text-sm font-semibold text-gray-900 hover:bg-blue-500 hover:text-white"
+          className="mt-7 inline-flex rounded-lg bg-white px-5 py-3 text-sm font-semibold text-gray-900 hover:bg-blue-500 hover:text-white  gap-3"
         >
-          Start Scanning  <MoveRight className="hover:text-green-400"/>
+          <span>Start Scanning</span>  <MoveRight className="hover:text-green-400"/>
         </Link>
 
       </div>
