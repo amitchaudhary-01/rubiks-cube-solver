@@ -46,9 +46,9 @@ export default function Hero() {
           </div>
 
           <div className="mt-6 flex flex-wrap gap-4 text-sm text-gray-500">
-            <span><Check/> Color Detection</span>
-            <span><Check/> Cube Validation</span>
-            <span><Check/> Solution</span>
+            <span> Color Detection</span><Check className="text-green-400"/>
+            <span> Cube Validation</span><Check className="text-green-400"/>
+            <span> Solution</span><Check className="text-green-400"/>
           </div>
         </div>
 
