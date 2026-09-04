@@ -1,5 +1,6 @@
 import Link from "next/link";
 import RealisticCube from "./RealisticCube";
+import { Check, MoveRight } from "lucide-react";
 
 export default function Hero() {
   return (
@@ -33,7 +34,7 @@ export default function Hero() {
               href="/scanner"
               className="rounded-lg bg-blue-600 px-5 py-3 text-center text-sm font-medium text-white hover:bg-blue-700"
             >
-              Scan My Cube →
+              Scan My Cube <MoveRight/>
             </Link>
 
             <Link
@@ -45,9 +46,9 @@ export default function Hero() {
           </div>
 
           <div className="mt-6 flex flex-wrap gap-4 text-sm text-gray-500">
-            <span>✓ Color Detection</span>
-            <span>✓ Cube Validation</span>
-            <span>✓ Solution</span>
+            <span><Check/> Color Detection</span>
+            <span><Check/> Cube Validation</span>
+            <span><Check/> Solution</span>
           </div>
         </div>
 

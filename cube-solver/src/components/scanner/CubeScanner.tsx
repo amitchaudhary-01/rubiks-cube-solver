@@ -2,9 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 
-import CubeCamera, {
-  type CubeCameraHandle,
-} from "./CubeCamera";
+import CubeCamera, { type CubeCameraHandle } from "./CubeCamera";
 
 import ScannerGrid from "./ScannerGrid";
 import FaceScanner from "./FaceScanner";
@@ -16,17 +14,13 @@ import { detectFaceColors } from "@/src/lib/colorDetection";
 import type { CubeColor } from "@/src/lib/colorDetection";
 
 import { FACE_NAMES, FACE_ORDER } from "@/src/lib/cube";
-import type {
-  CubeState,
-  CubeFaceName,
-} from "@/src/lib/cube";
+import type { CubeState, CubeFaceName } from "@/src/lib/cube";
 
 import { validateCubeState } from "@/src/lib/cubeValidation";
-import type {
-  CubeValidationResult,
-} from "@/src/lib/cubeValidation";
+import type { CubeValidationResult } from "@/src/lib/cubeValidation";
 
 import { cubeStateToKociemba } from "@/src/lib/kociemba";
+import RubiksCube3D from "../solver/cube3D/RubiksCube3D";
 
 export default function CubeScanner() {
   const cameraRef = useRef<CubeCameraHandle>(null);
@@ -35,8 +29,7 @@ export default function CubeScanner() {
      CAMERA STATE
   -------------------------------- */
 
-  const [cameraActive, setCameraActive] =
-    useState(false);
+  const [cameraActive, setCameraActive] = useState(false);
 
   /* --------------------------------
      CURRENT FACE NUMBER
@@ -49,8 +42,7 @@ export default function CubeScanner() {
      6 → B
   -------------------------------- */
 
-  const [faceNumber, setFaceNumber] =
-    useState(1);
+  const [faceNumber, setFaceNumber] = useState(1);
 
   /* --------------------------------
      CAPTURED IMAGES
@@ -64,15 +56,15 @@ export default function CubeScanner() {
      }
   -------------------------------- */
 
-  const [capturedFaces, setCapturedFaces] =
-    useState<Record<number, string>>({});
+  const [capturedFaces, setCapturedFaces] = useState<Record<number, string>>(
+    {},
+  );
 
   /* --------------------------------
      CURRENT FACE COLORS
   -------------------------------- */
 
-  const [detectedColors, setDetectedColors] =
-    useState<CubeColor[]>([]);
+  const [detectedColors, setDetectedColors] = useState<CubeColor[]>([]);
 
   /* --------------------------------
      ALL DETECTED FACES
@@ -86,17 +78,15 @@ export default function CubeScanner() {
      }
   -------------------------------- */
 
-  const [detectedFaces, setDetectedFaces] =
-    useState<
-      Partial<Record<CubeFaceName, CubeColor[]>>
-    >({});
+  const [detectedFaces, setDetectedFaces] = useState<
+    Partial<Record<CubeFaceName, CubeColor[]>>
+  >({});
 
   /* --------------------------------
      FINAL CUBE STATE
   -------------------------------- */
 
-  const [cubeState, setCubeState] =
-    useState<CubeState | null>(null);
+  const [cubeState, setCubeState] = useState<CubeState | null>(null);
 
   /* --------------------------------
      VALIDATION RESULT
@@ -109,8 +99,7 @@ export default function CubeScanner() {
      KOCIEMBA STRING
   -------------------------------- */
 
-  const [kociembaString, setKociembaString] =
-    useState<string | null>(null);
+  const [kociembaString, setKociembaString] = useState<string | null>(null);
 
   /* --------------------------------
      ERROR
@@ -139,13 +128,10 @@ export default function CubeScanner() {
      CAMERA ERROR
   -------------------------------- */
 
-  const handleCameraError = useCallback(
-    (message: string) => {
-      setError(message);
-      setCameraActive(false);
-    },
-    []
-  );
+  const handleCameraError = useCallback((message: string) => {
+    setError(message);
+    setCameraActive(false);
+  }, []);
 
   /* --------------------------------
      CAPTURE FACE
@@ -154,13 +140,10 @@ export default function CubeScanner() {
   const captureFace = () => {
     setError("");
 
-    const image =
-      cameraRef.current?.captureFrame();
+    const image = cameraRef.current?.captureFrame();
 
     if (!image) {
-      setError(
-        "Unable to capture the cube face."
-      );
+      setError("Unable to capture the cube face.");
 
       return;
     }
@@ -168,8 +151,7 @@ export default function CubeScanner() {
     /*
      * Current face.
      */
-    const currentFaceName =
-      FACE_ORDER[faceNumber - 1];
+    const currentFaceName = FACE_ORDER[faceNumber - 1];
 
     /*
      * Save captured image.
@@ -190,22 +172,16 @@ export default function CubeScanner() {
         /*
          * Detect the 9 stickers.
          */
-        const colors =
-          detectFaceColors(img);
+        const colors = detectFaceColors(img);
 
-        console.log(
-          `${currentFaceName} detected colors:`,
-          colors
-        );
+        console.log(`${currentFaceName} detected colors:`, colors);
 
         /*
          * Make sure exactly
          * 9 stickers were detected.
          */
         if (colors.length !== 9) {
-          throw new Error(
-            `Expected 9 colors but received ${colors.length}.`
-          );
+          throw new Error(`Expected 9 colors but received ${colors.length}.`);
         }
 
         /*
@@ -230,34 +206,23 @@ export default function CubeScanner() {
         setKociembaString(null);
 
         toast.success(
-          `${FACE_NAMES[currentFaceName]} face scanned successfully!`
+          `${FACE_NAMES[currentFaceName]} face scanned successfully!`,
         );
       } catch (err) {
-        console.error(
-          "Color detection error:",
-          err
-        );
+        console.error("Color detection error:", err);
 
         setDetectedColors([]);
 
-        setError(
-          "Face captured, but automatic color detection failed."
-        );
+        setError("Face captured, but automatic color detection failed.");
 
-        toast.error(
-          "Color detection failed."
-        );
+        toast.error("Color detection failed.");
       }
     };
 
     img.onerror = () => {
-      setError(
-        "The captured image could not be processed."
-      );
+      setError("The captured image could not be processed.");
 
-      toast.error(
-        "Unable to process captured image."
-      );
+      toast.error("Unable to process captured image.");
     };
 
     /*
@@ -271,8 +236,7 @@ export default function CubeScanner() {
   -------------------------------- */
 
   const rescanFace = () => {
-    const currentFaceName =
-      FACE_ORDER[faceNumber - 1];
+    const currentFaceName = FACE_ORDER[faceNumber - 1];
 
     /*
      * Remove captured image.
@@ -336,9 +300,7 @@ export default function CubeScanner() {
     setDetectedColors([]);
     setError("");
 
-    setFaceNumber(
-      (previous) => previous + 1
-    );
+    setFaceNumber((previous) => previous + 1);
   };
 
   /* --------------------------------
@@ -353,55 +315,41 @@ export default function CubeScanner() {
     setDetectedColors([]);
     setError("");
 
-    setFaceNumber(
-      (previous) => previous - 1
-    );
+    setFaceNumber((previous) => previous - 1);
   };
 
   /* --------------------------------
      BUILD CUBE STATE
   -------------------------------- */
 
-  const buildCubeState =
-    (): CubeState | null => {
-      const requiredFaces: CubeFaceName[] = [
-        "U",
-        "R",
-        "F",
-        "D",
-        "L",
-        "B",
-      ];
+  const buildCubeState = (): CubeState | null => {
+    const requiredFaces: CubeFaceName[] = ["U", "R", "F", "D", "L", "B"];
 
-      /*
-       * Make sure all six faces
-       * exist and contain 9 colors.
-       */
-      for (const face of requiredFaces) {
-        const colors =
-          detectedFaces[face];
+    /*
+     * Make sure all six faces
+     * exist and contain 9 colors.
+     */
+    for (const face of requiredFaces) {
+      const colors = detectedFaces[face];
 
-        if (
-          !colors ||
-          colors.length !== 9
-        ) {
-          return null;
-        }
+      if (!colors || colors.length !== 9) {
+        return null;
       }
+    }
 
-      /*
-       * Convert detected faces
-       * into CubeState.
-       */
-      return {
-        U: detectedFaces.U as CubeState["U"],
-        R: detectedFaces.R as CubeState["R"],
-        F: detectedFaces.F as CubeState["F"],
-        D: detectedFaces.D as CubeState["D"],
-        L: detectedFaces.L as CubeState["L"],
-        B: detectedFaces.B as CubeState["B"],
-      };
+    /*
+     * Convert detected faces
+     * into CubeState.
+     */
+    return {
+      U: detectedFaces.U as CubeState["U"],
+      R: detectedFaces.R as CubeState["R"],
+      F: detectedFaces.F as CubeState["F"],
+      D: detectedFaces.D as CubeState["D"],
+      L: detectedFaces.L as CubeState["L"],
+      B: detectedFaces.B as CubeState["B"],
     };
+  };
 
   /* --------------------------------
      FINISH SCAN
@@ -413,8 +361,7 @@ export default function CubeScanner() {
     /*
      * Count scanned faces.
      */
-    const totalFaces =
-      Object.keys(detectedFaces).length;
+    const totalFaces = Object.keys(detectedFaces).length;
 
     /*
      * Need all six faces.
@@ -424,14 +371,11 @@ export default function CubeScanner() {
       setCubeState(null);
       setKociembaString(null);
 
-      const message =
-        `Please scan all 6 faces. Currently scanned ${totalFaces} of 6.`;
+      const message = `Please scan all 6 faces. Currently scanned ${totalFaces} of 6.`;
 
       setError(message);
 
-      toast.error(
-        `Only ${totalFaces} of 6 faces have been scanned.`
-      );
+      toast.error(`Only ${totalFaces} of 6 faces have been scanned.`);
 
       return;
     }
@@ -447,12 +391,10 @@ export default function CubeScanner() {
       setKociembaString(null);
 
       setError(
-        "Unable to build the cube state. Please rescan the missing faces."
+        "Unable to build the cube state. Please rescan the missing faces.",
       );
 
-      toast.error(
-        "Invalid cube data."
-      );
+      toast.error("Invalid cube data.");
 
       return;
     }
@@ -460,22 +402,15 @@ export default function CubeScanner() {
     /*
      * Validate cube colors.
      */
-    const validation =
-      validateCubeState(state);
+    const validation = validateCubeState(state);
 
     setValidationResult(validation);
 
-    console.log(
-      "================================="
-    );
+    console.log("=================================");
 
-    console.log(
-      "CUBE VALIDATION"
-    );
+    console.log("CUBE VALIDATION");
 
-    console.log(
-      "================================="
-    );
+    console.log("=================================");
 
     console.log(validation);
 
@@ -486,14 +421,11 @@ export default function CubeScanner() {
       setCubeState(null);
       setKociembaString(null);
 
-      const validationMessage =
-        validation.errors.join(" ");
+      const validationMessage = validation.errors.join(" ");
 
       setError(validationMessage);
 
-      toast.error(
-        "Invalid cube state. Please rescan the incorrect faces."
-      );
+      toast.error("Invalid cube state. Please rescan the incorrect faces.");
 
       return;
     }
@@ -508,8 +440,7 @@ export default function CubeScanner() {
      * Kociemba format.
      */
     try {
-      const kociemba =
-        cubeStateToKociemba(state);
+      const kociemba = cubeStateToKociemba(state);
 
       /*
        * Make sure the result
@@ -517,60 +448,38 @@ export default function CubeScanner() {
        */
       if (kociemba.length !== 54) {
         throw new Error(
-          `Kociemba string must contain 54 characters. Received ${kociemba.length}.`
+          `Kociemba string must contain 54 characters. Received ${kociemba.length}.`,
         );
       }
 
       setKociembaString(kociemba);
 
-      console.log(
-        "================================="
-      );
+      console.log("=================================");
 
-      console.log(
-        "VALID RUBIK'S CUBE"
-      );
+      console.log("VALID RUBIK'S CUBE");
 
-      console.log(
-        "================================="
-      );
+      console.log("=================================");
 
       console.log(state);
 
-      console.log(
-        "Color counts:",
-        validation.counts
-      );
+      console.log("Color counts:", validation.counts);
 
-      console.log(
-        "Kociemba string:",
-        kociemba
-      );
+      console.log("Kociemba string:", kociemba);
 
-      console.log(
-        "Kociemba length:",
-        kociemba.length
-      );
+      console.log("Kociemba length:", kociemba.length);
 
-      toast.success(
-        "Cube is valid and ready to solve!"
-      );
+      toast.success("Cube is valid and ready to solve!");
     } catch (err) {
-      console.error(
-        "Kociemba conversion error:",
-        err
-      );
+      console.error("Kociemba conversion error:", err);
 
       setCubeState(null);
       setKociembaString(null);
 
       setError(
-        "Cube is valid, but it could not be converted to Kociemba format."
+        "Cube is valid, but it could not be converted to Kociemba format.",
       );
 
-      toast.error(
-        "Kociemba conversion failed."
-      );
+      toast.error("Kociemba conversion failed.");
     }
   };
 
@@ -578,18 +487,15 @@ export default function CubeScanner() {
      CURRENT FACE IMAGE
   -------------------------------- */
 
-  const currentImage =
-    capturedFaces[faceNumber] ?? null;
+  const currentImage = capturedFaces[faceNumber] ?? null;
 
   /* --------------------------------
      CURRENT FACE NAME
   -------------------------------- */
 
-  const currentFaceName =
-    FACE_ORDER[faceNumber - 1];
+  const currentFaceName = FACE_ORDER[faceNumber - 1];
 
-  const currentFaceDisplayName =
-    FACE_NAMES[currentFaceName];
+  const currentFaceDisplayName = FACE_NAMES[currentFaceName];
 
   /* --------------------------------
      RENDER
@@ -597,13 +503,11 @@ export default function CubeScanner() {
 
   return (
     <section className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 py-8 sm:px-6 lg:px-8">
-
       {/* --------------------------------
           HEADER
       -------------------------------- */}
 
       <div className="mb-8 text-center">
-
         <p className="mb-2 text-xs font-bold uppercase tracking-widest text-blue-600">
           Rubik&apos;s Cube Solver
         </p>
@@ -613,11 +517,9 @@ export default function CubeScanner() {
         </h1>
 
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-zinc-600 sm:text-base">
-          Scan each face of your Rubik&apos;s
-          Cube. Keep the cube aligned inside
+          Scan each face of your Rubik&apos;s Cube. Keep the cube aligned inside
           the 3×3 guide.
         </p>
-
       </div>
 
       {/* --------------------------------
@@ -625,9 +527,7 @@ export default function CubeScanner() {
       -------------------------------- */}
 
       <div className="mx-auto w-full max-w-3xl">
-
         <div className="relative aspect-video overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-xl">
-
           {cameraActive ? (
             <>
               <CubeCamera
@@ -645,14 +545,8 @@ export default function CubeScanner() {
                   <ScannerGrid />
 
                   <div className="absolute left-1/2 top-4 -translate-x-1/2 whitespace-nowrap rounded-full bg-black/60 px-4 py-2 text-xs font-medium text-white shadow-sm backdrop-blur-md">
-
-                    {currentFaceDisplayName}
-
-                    {" "}Face ({faceNumber}/6):
-
-                    {" "}Align cube inside
-                    the grid
-
+                    {currentFaceDisplayName} Face ({faceNumber}/6): Align cube
+                    inside the grid
                   </div>
                 </>
               )}
@@ -663,7 +557,6 @@ export default function CubeScanner() {
 
               {currentImage && (
                 <div className="absolute inset-0 flex items-center justify-center bg-zinc-950/80 backdrop-blur-sm">
-
                   <img
                     src={currentImage}
                     alt={`Captured ${currentFaceDisplayName} cube face`}
@@ -671,31 +564,20 @@ export default function CubeScanner() {
                   />
 
                   <div className="absolute left-1/2 top-4 -translate-x-1/2 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-sm">
-
-                    {currentFaceDisplayName}
-
-                    {" "}face captured
-
+                    {currentFaceDisplayName} face captured
                   </div>
-
                 </div>
               )}
-
             </>
           ) : (
-
             /* --------------------------------
                 CAMERA INACTIVE
             -------------------------------- */
 
             <div className="flex h-full items-center justify-center bg-white px-6 text-center">
-
               <div>
-
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-50 text-blue-600 shadow-sm">
-
                   <Camera />
-
                 </div>
 
                 <h2 className="text-lg font-bold text-zinc-900">
@@ -703,15 +585,11 @@ export default function CubeScanner() {
                 </h2>
 
                 <p className="mt-1 text-sm text-zinc-500">
-                  Start your camera to begin
-                  scanning.
+                  Start your camera to begin scanning.
                 </p>
-
               </div>
-
             </div>
           )}
-
         </div>
 
         {/* --------------------------------
@@ -732,23 +610,16 @@ export default function CubeScanner() {
         -------------------------------- */}
 
         <div className="mt-6 flex justify-center">
-
           {!cameraActive ? (
-
             <button
               type="button"
               onClick={startCamera}
               className="flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
             >
-
               <Camera className="h-4 w-4" />
-
               Start Camera
-
             </button>
-
           ) : (
-
             <button
               type="button"
               onClick={stopCamera}
@@ -756,9 +627,7 @@ export default function CubeScanner() {
             >
               Stop Camera
             </button>
-
           )}
-
         </div>
 
         {/* --------------------------------
@@ -782,7 +651,6 @@ export default function CubeScanner() {
 
         {Object.keys(detectedFaces).length > 0 && (
           <div className="mt-4 flex justify-center gap-3">
-
             <button
               type="button"
               onClick={previousFace}
@@ -804,7 +672,6 @@ export default function CubeScanner() {
             >
               Next →
             </button>
-
           </div>
         )}
 
@@ -814,20 +681,16 @@ export default function CubeScanner() {
 
         {Object.keys(detectedFaces).length > 0 && (
           <div className="mt-8 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-
             {/* Header */}
 
             <div className="mb-5">
-
               <h2 className="text-lg font-bold text-zinc-900">
                 Detected Cube State
               </h2>
 
               <p className="mt-1 text-sm text-zinc-500">
-                {Object.keys(detectedFaces).length}
-                {" "}of 6 faces scanned.
+                {Object.keys(detectedFaces).length} of 6 faces scanned.
               </p>
-
             </div>
 
             {/* --------------------------------
@@ -835,30 +698,23 @@ export default function CubeScanner() {
             -------------------------------- */}
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-
               {FACE_ORDER.map((face) => {
-
-                const colors =
-                  detectedFaces[face];
+                const colors = detectedFaces[face];
 
                 return (
                   <div
                     key={face}
                     className="rounded-xl border border-zinc-200 p-3"
                   >
-
                     <p className="mb-3 text-sm font-bold text-zinc-800">
                       {face} — {FACE_NAMES[face]}
                     </p>
 
                     <div className="mx-auto grid max-w-[180px] grid-cols-3 overflow-hidden rounded-lg border border-zinc-300">
-
                       {Array.from({
                         length: 9,
                       }).map((_, index) => {
-
-                        const color =
-                          colors?.[index];
+                        const color = colors?.[index];
 
                         return (
                           <div
@@ -880,21 +736,16 @@ export default function CubeScanner() {
                             }`}
                             title={
                               color
-                                ? `Sticker ${
-                                    index + 1
-                                  }: ${color}`
+                                ? `Sticker ${index + 1}: ${color}`
                                 : "Not detected"
                             }
                           />
                         );
                       })}
-
                     </div>
-
                   </div>
                 );
               })}
-
             </div>
 
             {/* --------------------------------
@@ -903,23 +754,16 @@ export default function CubeScanner() {
 
             {validationResult && (
               <div className="mt-6 rounded-xl border border-zinc-200 p-4">
-
-                <h3 className="font-bold text-zinc-900">
-                  Color Validation
-                </h3>
+                <h3 className="font-bold text-zinc-900">Color Validation</h3>
 
                 <p className="mt-1 text-sm text-zinc-500">
-                  Each cube color must appear
-                  exactly 9 times.
+                  Each cube color must appear exactly 9 times.
                 </p>
 
                 {/* Color counts */}
 
                 <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-
-                  {Object.entries(
-                    validationResult.counts
-                  ).map(
+                  {Object.entries(validationResult.counts).map(
                     ([color, count]) => (
                       <div
                         key={color}
@@ -929,58 +773,33 @@ export default function CubeScanner() {
                             : "bg-red-50 text-red-700"
                         }`}
                       >
+                        <span className="font-bold">{color}</span>
 
-                        <span className="font-bold">
-                          {color}
-                        </span>
-
-                        <span className="ml-2">
-                          {count} / 9
-                        </span>
-
+                        <span className="ml-2">{count} / 9</span>
                       </div>
-                    )
+                    ),
                   )}
-
                 </div>
 
                 {/* Validation status */}
 
                 {validationResult.valid ? (
-
                   <div className="mt-4 rounded-lg bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">
-                    ✓ All colors are correctly
-                    detected.
+                    ✓ All colors are correctly detected.
                   </div>
-
                 ) : (
-
                   <div className="mt-4 rounded-lg bg-red-50 px-4 py-3">
-
                     <p className="text-sm font-semibold text-red-700">
-                      Cube color counts are
-                      invalid.
+                      Cube color counts are invalid.
                     </p>
 
                     <ul className="mt-2 space-y-1 text-sm text-red-600">
-
-                      {validationResult.errors.map(
-                        (
-                          validationError,
-                          index
-                        ) => (
-                          <li key={index}>
-                            • {validationError}
-                          </li>
-                        )
-                      )}
-
+                      {validationResult.errors.map((validationError, index) => (
+                        <li key={index}>• {validationError}</li>
+                      ))}
                     </ul>
-
                   </div>
-
                 )}
-
               </div>
             )}
 
@@ -990,11 +809,7 @@ export default function CubeScanner() {
 
             {cubeState && (
               <div className="mt-5 rounded-lg bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-
-                ✓ Cube state created
-                successfully and is ready
-                for the solver.
-
+                ✓ Cube state created successfully and is ready for the solver.
               </div>
             )}
 
@@ -1004,41 +819,44 @@ export default function CubeScanner() {
 
             {kociembaString && (
               <div className="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-4">
-
-                <h3 className="font-bold text-blue-900">
-                  Kociemba Cube State
-                </h3>
+                <h3 className="font-bold text-blue-900">Kociemba Cube State</h3>
 
                 <p className="mt-1 text-sm text-blue-700">
-                  54-character cube
-                  representation generated
-                  successfully.
+                  54-character cube representation generated successfully.
                 </p>
 
                 <div className="mt-3 overflow-x-auto rounded-lg bg-zinc-900 p-4">
-
                   <code className="whitespace-nowrap font-mono text-sm text-white">
                     {kociembaString}
                   </code>
-
                 </div>
 
                 <div className="mt-3 text-xs text-blue-700">
-                  Length:{" "}
-                  <strong>
-                    {kociembaString.length}
-                  </strong>{" "}
-                  / 54
+                  Length: <strong>{kociembaString.length}</strong> / 54
                 </div>
-
               </div>
             )}
 
+            {/* --------------------------------
+    3D SCRAMBLED CUBE
+-------------------------------- */}
+
+            {kociembaString && (
+              <div className="mt-8">
+                <div className="mb-4">
+                  <h3 className="text-xl font-bold text-zinc-900">3D Cube</h3>
+
+                  <p className="mt-1 text-sm text-zinc-500">
+                    Interactive 3D representation of your scanned cube.
+                  </p>
+                </div>
+
+                <RubiksCube3D kociembaString={kociembaString} />
+              </div>
+            )}
           </div>
         )}
-
       </div>
-
     </section>
   );
 }

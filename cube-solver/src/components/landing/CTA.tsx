@@ -1,3 +1,4 @@
+import { MoveRight } from "lucide-react";
 import Link from "next/link";
 
 export default function CTA() {
@@ -16,9 +17,9 @@ export default function CTA() {
 
         <Link
           href="/scanner"
-          className="mt-7 inline-flex rounded-lg bg-white px-5 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-100"
+          className="mt-7 inline-flex rounded-lg bg-white px-5 py-3 text-sm font-semibold text-gray-900 hover:bg-blue-500 hover:text-white"
         >
-          Start Scanning →
+          Start Scanning  <MoveRight className="hover:text-green-400"/>
         </Link>
 
       </div>
