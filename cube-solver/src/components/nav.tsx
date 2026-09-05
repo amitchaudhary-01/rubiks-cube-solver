@@ -46,6 +46,12 @@ export default function Navbar() {
           >
             Scanner
           </Link>
+
+          <Link
+          href="/solver"
+              onClick={() => setIsOpen(false)}
+              className="text-sm font-medium text-gray-600 transition hover:text-blue-700"
+            >Solver</Link>
         </nav>
 
         {/* Desktop CTA */}
@@ -117,6 +123,12 @@ export default function Navbar() {
             >
               Scanner
             </Link>
+
+            <Link
+            href="/solver"
+              onClick={() => setIsOpen(false)}
+              className="text-sm font-medium text-gray-600 transition hover:text-blue-700"
+            >Solver</Link>
 
             <div className="pt-2">
               <Link
