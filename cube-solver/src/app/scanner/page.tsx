@@ -1,4 +1,5 @@
 import CubeEditor from "@/src/components/cube/CubeEditor";
+import CubeFaceEditor from "@/src/components/cube/CubeFaceEditor";
 import CubeScanner from "@/src/components/scanner/CubeScanner";
 
 export default function ScannerPage() {
@@ -6,6 +7,7 @@ export default function ScannerPage() {
     <main className="min-h-screen bg-[#FBFBFA] text-zinc-900">
       <CubeScanner />
       <CubeEditor/>
+      {/* <CubeFaceEditor/> */}
     </main>
   );
 }
