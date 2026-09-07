@@ -1,26 +1,14 @@
-
 "use client";
 
-import {
-  Canvas,
-  useFrame,
-  type ThreeEvent,
-} from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
 const SIZE = 0.95;
 const GAP = 0.08;
 const STEP = SIZE + GAP;
 const STICKER = 0.72;
-
-const ANIMATION_SPEED = 0.35;
 
 const COLORS: Record<string, string> = {
   U: "#ffffff",
@@ -36,12 +24,10 @@ type Face = "U" | "R" | "F" | "D" | "L" | "B";
 type CubieData = {
   id: string;
 
-  // Logical position
   x: number;
   y: number;
   z: number;
 
-  // Sticker colors
   uColor?: string;
   dColor?: string;
   fColor?: string;
@@ -58,27 +44,13 @@ type Move = {
 
 type RubiksCube3DProps = {
   kociembaString?: string | null;
-
-  /**
-   * Example:
-   *
-   * "R U R' U' F2"
-   */
   solution?: string;
-
-  /**
-   * Automatically start playing solution.
-   */
   autoPlay?: boolean;
-
-  /**
-   * Animation speed in seconds.
-   */
   moveDuration?: number;
 };
 
 /* ========================================================= */
-/* KOCIEMBA STRING HELPERS                                   */
+/* KOCIEMBA STRING                                           */
 /* ========================================================= */
 
 function getStickerColor(
@@ -90,9 +62,7 @@ function getStickerColor(
     return fallback;
   }
 
-  const face = kociembaString[index];
-
-  return COLORS[face] ?? fallback;
+  return COLORS[kociembaString[index]] ?? fallback;
 }
 
 /* ========================================================= */
@@ -100,49 +70,31 @@ function getStickerColor(
 /* ========================================================= */
 
 function getUIndex(x: number, z: number) {
-  const row = 1 - z;
-  const col = x + 1;
-
-  return row * 3 + col;
+  return (1 - z) * 3 + (x + 1);
 }
 
 function getDIndex(x: number, z: number) {
-  const row = z + 1;
-  const col = x + 1;
-
-  return row * 3 + col;
+  return (z + 1) * 3 + (x + 1);
 }
 
 function getFIndex(x: number, y: number) {
-  const row = 1 - y;
-  const col = x + 1;
-
-  return row * 3 + col;
+  return (1 - y) * 3 + (x + 1);
 }
 
 function getBIndex(x: number, y: number) {
-  const row = 1 - y;
-  const col = 1 - x;
-
-  return row * 3 + col;
+  return (1 - y) * 3 + (1 - x);
 }
 
 function getRIndex(y: number, z: number) {
-  const row = 1 - y;
-  const col = 1 - z;
-
-  return row * 3 + col;
+  return (1 - y) * 3 + (1 - z);
 }
 
 function getLIndex(y: number, z: number) {
-  const row = 1 - y;
-  const col = z + 1;
-
-  return row * 3 + col;
+  return (1 - y) * 3 + (z + 1);
 }
 
 /* ========================================================= */
-/* CREATE INITIAL CUBIES                                     */
+/* CREATE CUBIES                                             */
 /* ========================================================= */
 
 function createCubies(
@@ -240,7 +192,7 @@ function createCubies(
 }
 
 /* ========================================================= */
-/* MOVE PARSER                                               */
+/* PARSE SOLUTION                                            */
 /* ========================================================= */
 
 function parseSolution(solution: string): Move[] {
@@ -286,7 +238,7 @@ function parseSolution(solution: string): Move[] {
 }
 
 /* ========================================================= */
-/* MOVE LAYER TEST                                           */
+/* LAYER DETECTION                                           */
 /* ========================================================= */
 
 function isInMoveLayer(
@@ -318,7 +270,7 @@ function isInMoveLayer(
 }
 
 /* ========================================================= */
-/* ROTATE INTEGER CUBIE POSITION                              */
+/* POSITION ROTATION                                         */
 /* ========================================================= */
 
 function rotatePosition(
@@ -332,72 +284,66 @@ function rotatePosition(
   let ny = y;
   let nz = z;
 
-  /*
-   * Direction is intentionally defined here
-   * according to standard Singmaster notation.
-   */
+  switch (face) {
+    case "R":
+      if (direction === 1) {
+        ny = -z;
+        nz = y;
+      } else {
+        ny = z;
+        nz = -y;
+      }
+      break;
 
-  if (face === "R") {
-    // Rotate around X axis.
-    if (direction === 1) {
-      ny = -z;
-      nz = y;
-    } else {
-      ny = z;
-      nz = -y;
-    }
-  }
+    case "L":
+      if (direction === 1) {
+        ny = z;
+        nz = -y;
+      } else {
+        ny = -z;
+        nz = y;
+      }
+      break;
 
-  if (face === "L") {
-    if (direction === 1) {
-      ny = z;
-      nz = -y;
-    } else {
-      ny = -z;
-      nz = y;
-    }
-  }
+    case "U":
+      if (direction === 1) {
+        nx = z;
+        nz = -x;
+      } else {
+        nx = -z;
+        nz = x;
+      }
+      break;
 
-  if (face === "U") {
-    // Rotate around Y axis.
-    if (direction === 1) {
-      nx = z;
-      nz = -x;
-    } else {
-      nx = -z;
-      nz = x;
-    }
-  }
+    case "D":
+      if (direction === 1) {
+        nx = -z;
+        nz = x;
+      } else {
+        nx = z;
+        nz = -x;
+      }
+      break;
 
-  if (face === "D") {
-    if (direction === 1) {
-      nx = -z;
-      nz = x;
-    } else {
-      nx = z;
-      nz = -x;
-    }
-  }
+    case "F":
+      if (direction === 1) {
+        nx = -y;
+        ny = x;
+      } else {
+        nx = y;
+        ny = -x;
+      }
+      break;
 
-  if (face === "F") {
-    // Rotate around Z axis.
-    if (direction === 1) {
-      nx = -y;
-      ny = x;
-    } else {
-      nx = y;
-      ny = -x;
-    }
-  }
-
-  if (face === "B") {
-    if (direction === 1) {
-      nx = y;
-      ny = -x;
-    } else {
-      nx = -y;
-      ny = x;
-    }
+    case "B":
+      if (direction === 1) {
+        nx = y;
+        ny = -x;
+      } else {
+        nx = -y;
+        ny = x;
+      }
+      break;
   }
 
   return {
@@ -408,38 +354,102 @@ function rotatePosition(
 }
 
 /* ========================================================= */
-/* CUBIE COMPONENT                                           */
+/* APPLY MOVE                                               */
+/* ========================================================= */
+
+function applyMove(
+  cubies: CubieData[],
+  move: Move,
+): CubieData[] {
+  const direction: 1 | -1 =
+    move.amount === -1 ? -1 : 1;
+
+  const turns =
+    move.amount === 2 ? 2 : 1;
+
+  return cubies.map((cubie) => {
+    if (!isInMoveLayer(cubie, move.face)) {
+      return {
+        ...cubie,
+      };
+    }
+
+    let position = {
+      x: cubie.x,
+      y: cubie.y,
+      z: cubie.z,
+    };
+
+    for (let i = 0; i < turns; i++) {
+      position = rotatePosition(
+        position.x,
+        position.y,
+        position.z,
+        move.face,
+        direction,
+      );
+    }
+
+    return {
+      ...cubie,
+      ...position,
+    };
+  });
+}
+
+/* ========================================================= */
+/* BUILD SOLUTION TIMELINE                                   */
+/* ========================================================= */
+
+function buildTimeline(
+  initialCubies: CubieData[],
+  moves: Move[],
+) {
+  const timeline: CubieData[][] = [
+    initialCubies,
+  ];
+
+  let current = initialCubies;
+
+  for (const move of moves) {
+    current = applyMove(current, move);
+    timeline.push(current);
+  }
+
+  return timeline;
+}
+
+/* ========================================================= */
+/* CUBIE                                                     */
 /* ========================================================= */
 
 type CubieProps = {
   cubie: CubieData;
-  meshRef: (id: string, object: THREE.Group | null) => void;
 };
 
-function Cubie({
-  cubie,
-  meshRef,
-}: CubieProps) {
+function Cubie({ cubie }: CubieProps) {
   return (
     <group
-      ref={(object) =>
-        meshRef(cubie.id, object)
-      }
       position={[
         cubie.x * STEP,
         cubie.y * STEP,
         cubie.z * STEP,
       ]}
     >
-      {/* Black cubie */}
+      {/* Cubie body */}
       <mesh>
         <boxGeometry
-          args={[SIZE, SIZE, SIZE]}
+          args={[
+            SIZE,
+            SIZE,
+            SIZE,
+          ]}
         />
 
         <meshStandardMaterial
           color="#111111"
           roughness={0.3}
+          metalness={0.05}
         />
       </mesh>
 
@@ -462,6 +472,7 @@ function Cubie({
 
           <meshStandardMaterial
             color={cubie.uColor}
+            roughness={0.25}
           />
         </mesh>
       )}
@@ -485,6 +496,7 @@ function Cubie({
 
           <meshStandardMaterial
             color={cubie.dColor}
+            roughness={0.25}
           />
         </mesh>
       )}
@@ -508,6 +520,7 @@ function Cubie({
 
           <meshStandardMaterial
             color={cubie.fColor}
+            roughness={0.25}
           />
         </mesh>
       )}
@@ -531,6 +544,7 @@ function Cubie({
 
           <meshStandardMaterial
             color={cubie.bColor}
+            roughness={0.25}
           />
         </mesh>
       )}
@@ -554,6 +568,7 @@ function Cubie({
 
           <meshStandardMaterial
             color={cubie.rColor}
+            roughness={0.25}
           />
         </mesh>
       )}
@@ -577,6 +592,7 @@ function Cubie({
 
           <meshStandardMaterial
             color={cubie.lColor}
+            roughness={0.25}
           />
         </mesh>
       )}
@@ -589,413 +605,18 @@ function Cubie({
 /* ========================================================= */
 
 type CubeModelProps = {
-  kociembaString: string | null;
-  solution: string;
-  autoPlay: boolean;
-  moveDuration: number;
-  onMoveChange?: (
-    index: number,
-    total: number,
-    move: string | null,
-  ) => void;
+  cubies: CubieData[];
 };
 
 function CubeModel({
-  kociembaString,
-  solution,
-  autoPlay,
-  moveDuration,
-  onMoveChange,
+  cubies,
 }: CubeModelProps) {
-  const [cubies, setCubies] = useState<CubieData[]>(() =>
-    createCubies(kociembaString),
-  );
-
-  const cubieRefs = useRef<
-    Record<string, THREE.Group | null>
-  >({});
-
-  const moves = useMemo(
-    () => parseSolution(solution),
-    [solution],
-  );
-
-  const moveIndexRef = useRef(0);
-  const playingRef = useRef(false);
-  const animationRef = useRef<{
-    move: Move;
-    start: number;
-    duration: number;
-    cubieIds: string[];
-    startPositions: Record<
-      string,
-      THREE.Vector3
-    >;
-    startQuaternions: Record<
-      string,
-      THREE.Quaternion
-    >;
-  } | null>(null);
-
-  const [playing, setPlaying] =
-    useState(false);
-
-  /*
-   * Rebuild cube whenever a completely
-   * new Kociemba state is supplied.
-   */
-  useEffect(() => {
-    setCubies(createCubies(kociembaString));
-
-    moveIndexRef.current = 0;
-    animationRef.current = null;
-    playingRef.current = autoPlay;
-
-    setPlaying(autoPlay);
-
-    onMoveChange?.(
-      0,
-      moves.length,
-      moves.length > 0
-        ? moves[0].notation
-        : null,
-    );
-  }, [
-    kociembaString,
-    moves.length,
-    autoPlay,
-  ]);
-
-  /*
-   * Keep autoPlay state synchronized.
-   */
-  useEffect(() => {
-    if (moves.length === 0) {
-      setPlaying(false);
-      playingRef.current = false;
-      return;
-    }
-
-    if (autoPlay) {
-      playingRef.current = true;
-      setPlaying(true);
-    }
-  }, [autoPlay, moves.length]);
-
-  /*
-   * Start a move animation.
-   */
-  const startMove = () => {
-    if (
-      animationRef.current ||
-      moves.length === 0
-    ) {
-      return;
-    }
-
-    const index = moveIndexRef.current;
-
-    if (index >= moves.length) {
-      playingRef.current = false;
-      setPlaying(false);
-
-      onMoveChange?.(
-        index,
-        moves.length,
-        null,
-      );
-
-      return;
-    }
-
-    const move = moves[index];
-
-    const selectedCubies = cubies.filter(
-      (cubie) =>
-        isInMoveLayer(cubie, move.face),
-    );
-
-    const startPositions: Record<
-      string,
-      THREE.Vector3
-    > = {};
-
-    const startQuaternions: Record<
-      string,
-      THREE.Quaternion
-    > = {};
-
-    selectedCubies.forEach((cubie) => {
-      const object =
-        cubieRefs.current[cubie.id];
-
-      if (!object) return;
-
-      startPositions[cubie.id] =
-        object.position.clone();
-
-      startQuaternions[cubie.id] =
-        object.quaternion.clone();
-    });
-
-    animationRef.current = {
-      move,
-      start: performance.now(),
-      duration: moveDuration * 1000,
-      cubieIds: selectedCubies.map(
-        (cubie) => cubie.id,
-      ),
-      startPositions,
-      startQuaternions,
-    };
-
-    onMoveChange?.(
-      index,
-      moves.length,
-      move.notation,
-    );
-  };
-
-  /*
-   * Animate moves frame-by-frame.
-   */
-  useFrame(() => {
-    if (
-      !playingRef.current &&
-      !animationRef.current
-    ) {
-      return;
-    }
-
-    if (
-      !animationRef.current &&
-      playingRef.current
-    ) {
-      startMove();
-      return;
-    }
-
-    const animation =
-      animationRef.current;
-
-    if (!animation) return;
-
-    const elapsed =
-      performance.now() - animation.start;
-
-    let progress =
-      elapsed / animation.duration;
-
-    progress = Math.min(
-      Math.max(progress, 0),
-      1,
-    );
-
-    /*
-     * Smooth easing.
-     */
-    const eased =
-      progress < 0.5
-        ? 2 * progress * progress
-        : 1 -
-          Math.pow(
-            -2 * progress + 2,
-            2,
-          ) /
-            2;
-
-    /*
-     * Standard face-turn angle.
-     *
-     * amount:
-     *  1  = clockwise
-     * -1  = counter-clockwise
-     *  2  = 180 degrees
-     */
-    let angle =
-      Math.PI / 2;
-
-    if (animation.move.amount === -1) {
-      angle = -Math.PI / 2;
-    }
-
-    if (animation.move.amount === 2) {
-      angle = Math.PI;
-    }
-
-    angle *= eased;
-
-    const axis =
-      animation.move.face === "R" ||
-      animation.move.face === "L"
-        ? new THREE.Vector3(1, 0, 0)
-        : animation.move.face === "U" ||
-            animation.move.face === "D"
-          ? new THREE.Vector3(0, 1, 0)
-          : new THREE.Vector3(0, 0, 1);
-
-    /*
-     * L and D/B require opposite physical
-     * rotation direction for Singmaster notation.
-     */
-    let directionMultiplier = 1;
-
-    if (
-      animation.move.face === "L" ||
-      animation.move.face === "D" ||
-      animation.move.face === "B"
-    ) {
-      directionMultiplier = -1;
-    }
-
-    const rotation =
-      new THREE.Quaternion().setFromAxisAngle(
-        axis,
-        angle * directionMultiplier,
-      );
-
-    animation.cubieIds.forEach((id) => {
-      const object =
-        cubieRefs.current[id];
-
-      const startPosition =
-        animation.startPositions[id];
-
-      const startQuaternion =
-        animation.startQuaternions[id];
-
-      if (
-        !object ||
-        !startPosition ||
-        !startQuaternion
-      ) {
-        return;
-      }
-
-      /*
-       * Rotate position around the origin.
-       * Since each selected cubie is on the
-       * turning layer, this creates the actual
-       * layer-turn animation.
-       */
-      object.position
-        .copy(startPosition)
-        .applyQuaternion(rotation);
-
-      object.quaternion
-        .copy(startQuaternion);
-
-      object.quaternion.premultiply(
-        rotation,
-      );
-    });
-
-    /*
-     * Animation completed.
-     */
-    if (progress >= 1) {
-      const move = animation.move;
-
-      const direction =
-        move.amount === -1
-          ? -1
-          : 1;
-
-      const turns =
-        move.amount === 2
-          ? 2
-          : 1;
-
-      setCubies((previous) => {
-        return previous.map((cubie) => {
-          if (
-            !isInMoveLayer(
-              cubie,
-              move.face,
-            )
-          ) {
-            return cubie;
-          }
-
-          let result = {
-            x: cubie.x,
-            y: cubie.y,
-            z: cubie.z,
-          };
-
-          for (
-            let i = 0;
-            i < turns;
-            i++
-          ) {
-            result = rotatePosition(
-              result.x,
-              result.y,
-              result.z,
-              move.face,
-              direction as 1 | -1,
-            );
-          }
-
-          return {
-            ...cubie,
-            ...result,
-          };
-        });
-      });
-
-      animationRef.current = null;
-
-      moveIndexRef.current += 1;
-
-      if (
-        moveIndexRef.current >=
-        moves.length
-      ) {
-        playingRef.current = false;
-        setPlaying(false);
-
-        onMoveChange?.(
-          moves.length,
-          moves.length,
-          null,
-        );
-      } else if (playingRef.current) {
-        onMoveChange?.(
-          moveIndexRef.current,
-          moves.length,
-          moves[
-            moveIndexRef.current
-          ].notation,
-        );
-      }
-    }
-  });
-
-  /*
-   * Prevent accidental interaction
-   * with cubies while solution is playing.
-   */
-  const handlePointerDown = (
-    event: ThreeEvent<PointerEvent>,
-  ) => {
-    if (playingRef.current) {
-      event.stopPropagation();
-    }
-  };
-
   return (
-    <group
-      onPointerDown={handlePointerDown}
-    >
+    <group>
       {cubies.map((cubie) => (
         <Cubie
           key={cubie.id}
           cubie={cubie}
-          meshRef={(id, object) => {
-            cubieRefs.current[id] =
-              object;
-          }}
         />
       ))}
     </group>
@@ -1010,209 +631,499 @@ export default function RubiksCube3D({
   kociembaString = null,
   solution = "",
   autoPlay = false,
-  moveDuration = ANIMATION_SPEED,
+  moveDuration = 0.35,
 }: RubiksCube3DProps) {
-  const [playing, setPlaying] =
-    useState(autoPlay);
-
-  const [currentMove, setCurrentMove] =
-    useState(0);
-
-  const [totalMoves, setTotalMoves] =
-    useState(0);
-
-  const [activeMove, setActiveMove] =
-    useState<string | null>(null);
-
-  /*
-   * This key forces the cube model to
-   * completely reset when the user presses
-   * Reset.
-   */
-  const [resetKey, setResetKey] =
-    useState(0);
-
   const moves = useMemo(
     () => parseSolution(solution),
     [solution],
   );
 
+  const initialCubies = useMemo(
+    () =>
+      createCubies(kociembaString),
+    [kociembaString],
+  );
+
+  const timeline = useMemo(
+    () =>
+      buildTimeline(
+        initialCubies,
+        moves,
+      ),
+    [initialCubies, moves],
+  );
+
+  const [currentStep, setCurrentStep] =
+    useState(0);
+
+  const [playing, setPlaying] =
+    useState(autoPlay);
+
+  const timerRef =
+    useRef<ReturnType<
+      typeof setInterval
+    > | null>(null);
+
+  /* ======================================================= */
+  /* RESET WHEN DATA CHANGES                                 */
+  /* ======================================================= */
+
   useEffect(() => {
+    setCurrentStep(0);
     setPlaying(autoPlay);
-    setCurrentMove(0);
-    setActiveMove(
-      moves.length > 0
-        ? moves[0].notation
-        : null,
+  }, [
+    kociembaString,
+    solution,
+    autoPlay,
+  ]);
+
+  /* ======================================================= */
+  /* CLEANUP TIMER                                           */
+  /* ======================================================= */
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearInterval(
+          timerRef.current,
+        );
+
+        timerRef.current = null;
+      }
+    };
+  }, []);
+
+  /* ======================================================= */
+  /* AUTO PLAY                                               */
+  /* ======================================================= */
+
+  useEffect(() => {
+    if (!playing) {
+      if (timerRef.current) {
+        clearInterval(
+          timerRef.current,
+        );
+
+        timerRef.current = null;
+      }
+
+      return;
+    }
+
+    if (moves.length === 0) {
+      setPlaying(false);
+      return;
+    }
+
+    if (currentStep >= moves.length) {
+      setPlaying(false);
+      return;
+    }
+
+    timerRef.current =
+      setInterval(() => {
+        setCurrentStep((previous) => {
+          if (
+            previous >= moves.length
+          ) {
+            return previous;
+          }
+
+          return previous + 1;
+        });
+      }, moveDuration * 1000);
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(
+          timerRef.current,
+        );
+
+        timerRef.current = null;
+      }
+    };
+  }, [
+    playing,
+    currentStep,
+    moves.length,
+    moveDuration,
+  ]);
+
+  /* ======================================================= */
+  /* NAVIGATION                                              */
+  /* ======================================================= */
+
+  const goPrevious = () => {
+    setPlaying(false);
+
+    setCurrentStep((step) =>
+      Math.max(step - 1, 0),
     );
-    setTotalMoves(moves.length);
-  }, [solution, autoPlay, moves.length]);
+  };
+
+  const goNext = () => {
+    setPlaying(false);
+
+    setCurrentStep((step) =>
+      Math.min(
+        step + 1,
+        moves.length,
+      ),
+    );
+  };
+
+  const goToStep = (step: number) => {
+    setPlaying(false);
+
+    setCurrentStep(
+      Math.max(
+        0,
+        Math.min(
+          step,
+          moves.length,
+        ),
+      ),
+    );
+  };
+
+  const reset = () => {
+    setPlaying(false);
+    setCurrentStep(0);
+  };
+
+  const play = () => {
+    if (moves.length === 0) {
+      return;
+    }
+
+    if (currentStep >= moves.length) {
+      setCurrentStep(0);
+    }
+
+    setPlaying(true);
+  };
+
+  /* ======================================================= */
+  /* STATE                                                   */
+  /* ======================================================= */
+
+  const isComplete =
+    moves.length > 0 &&
+    currentStep >= moves.length;
+
+  const currentMove =
+    currentStep > 0
+      ? moves[currentStep - 1]
+      : null;
+
+  const progress =
+    moves.length > 0
+      ? (currentStep /
+          moves.length) *
+        100
+      : 0;
+
+  /* ======================================================= */
+  /* RENDER                                                  */
+  /* ======================================================= */
 
   return (
-    <div className="relative h-[620px] w-full overflow-hidden rounded-2xl">
-      <Canvas
-        camera={{
-          position: [5, 5, 7],
-          fov: 45,
-        }}
-      >
-        <color
-          attach="background"
-          args={["#09090b"]}
-        />
+    <div className="w-full overflow-hidden rounded-2xl bg-[#09090b]">
 
-        <ambientLight intensity={2} />
+      {/* ================================================= */}
+      {/* 3D CUBE                                           */}
+      {/* ================================================= */}
 
-        <directionalLight
-          position={[5, 8, 5]}
-          intensity={4}
-        />
-
-        <directionalLight
-          position={[-5, 3, 5]}
-          intensity={2}
-        />
-
-        <CubeModel
-          key={`${resetKey}-${kociembaString}`}
-          kociembaString={kociembaString}
-          solution={solution}
-          autoPlay={playing}
-          moveDuration={moveDuration}
-          onMoveChange={(
-            index,
-            total,
-            move,
-          ) => {
-            setCurrentMove(index);
-            setTotalMoves(total);
-            setActiveMove(move);
+      <div className="h-[520px] w-full">
+        <Canvas
+          camera={{
+            position: [5, 5, 7],
+            fov: 45,
           }}
-        />
+        >
+          <color
+            attach="background"
+            args={["#09090b"]}
+          />
 
-        <OrbitControls
-          enableRotate={!playing}
-          enableZoom
-          enablePan={false}
-        />
-      </Canvas>
+          <ambientLight intensity={2} />
+
+          <directionalLight
+            position={[5, 8, 5]}
+            intensity={4}
+          />
+
+          <directionalLight
+            position={[-5, 3, 5]}
+            intensity={2}
+          />
+
+          <CubeModel
+            cubies={
+              timeline[currentStep] ??
+              initialCubies
+            }
+          />
+
+          <OrbitControls
+            enableRotate={!playing}
+            enableZoom
+            enablePan={false}
+            minDistance={4}
+            maxDistance={12}
+          />
+        </Canvas>
+      </div>
 
       {/* ================================================= */}
-      {/* SOLUTION CONTROLS                                */}
+      {/* SOLUTION PANEL                                    */}
       {/* ================================================= */}
 
-      {solution && (
-        <div className="absolute bottom-4 left-1/2 w-[calc(100%-2rem)] max-w-xl -translate-x-1/2">
-          <div className="rounded-2xl border border-white/10 bg-black/70 p-4 shadow-2xl backdrop-blur-md">
+      {moves.length > 0 && (
+        <div className="w-full border-t border-white/10 bg-black/80 p-4">
+          <div className="mx-auto w-full max-w-5xl">
 
-            {/* Current move */}
-            <div className="mb-3 text-center">
-              {activeMove ? (
+            {/* ================================================= */}
+            {/* CURRENT STATE                                    */}
+            {/* ================================================= */}
+
+            <div className="mb-4 text-center">
+              {currentStep === 0 ? (
                 <>
-                  <p className="text-xs uppercase tracking-wider text-gray-400">
+                  <p className="text-xs font-medium uppercase tracking-wider text-gray-400">
+                    Starting Position
+                  </p>
+
+                  <p className="mt-1 text-2xl font-bold text-white">
+                    Scrambled Cube
+                  </p>
+                </>
+              ) : isComplete ? (
+                <>
+                  <p className="text-xs font-medium uppercase tracking-wider text-gray-400">
+                    Finished
+                  </p>
+
+                  <p className="mt-1 text-2xl font-bold text-green-400">
+                    Cube Solved ✓
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-xs font-medium uppercase tracking-wider text-gray-400">
                     Current Move
                   </p>
 
                   <p className="mt-1 text-3xl font-bold text-white">
-                    {activeMove}
+                    {currentMove?.notation}
                   </p>
                 </>
-              ) : (
-                <p className="text-sm font-medium text-green-400">
-                  Solution Complete ✓
-                </p>
               )}
             </div>
 
-            {/* Progress */}
+            {/* ================================================= */}
+            {/* STEP BUTTONS                                      */}
+            {/* ================================================= */}
+
+            <div className="mb-4 overflow-x-auto pb-2">
+              <div className="flex min-w-max justify-start gap-2 px-1 sm:justify-center">
+
+                {/* START */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    goToStep(0)
+                  }
+                  className={[
+                    "flex min-w-[80px] flex-col items-center rounded-xl border px-3 py-2 transition",
+                    currentStep === 0
+                      ? "border-blue-500 bg-blue-600 text-white shadow-lg shadow-blue-500/20"
+                      : "border-white/10 bg-white/5 text-gray-300 hover:bg-white/10",
+                  ].join(" ")}
+                >
+                  <span className="text-[10px] uppercase tracking-wide opacity-70">
+                    Step
+                  </span>
+
+                  <span className="text-sm font-bold">
+                    Start
+                  </span>
+                </button>
+
+                {/* MOVES */}
+                {moves.map(
+                  (move, index) => {
+                    const step =
+                      index + 1;
+
+                    return (
+                      <button
+                        key={`${move.notation}-${index}`}
+                        type="button"
+                        onClick={() =>
+                          goToStep(step)
+                        }
+                        className={[
+                          "flex min-w-[58px] flex-col items-center rounded-xl border px-3 py-2 transition",
+                          currentStep ===
+                          step
+                            ? "border-blue-500 bg-blue-600 text-white shadow-lg shadow-blue-500/20"
+                            : currentStep >
+                                step
+                              ? "border-green-500/30 bg-green-500/10 text-green-300"
+                              : "border-white/10 bg-white/5 text-gray-300 hover:bg-white/10",
+                        ].join(" ")}
+                      >
+                        <span className="text-[10px] uppercase tracking-wide opacity-70">
+                          {step}
+                        </span>
+
+                        <span className="text-base font-bold">
+                          {
+                            move.notation
+                          }
+                        </span>
+                      </button>
+                    );
+                  },
+                )}
+
+                {/* SOLVED */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    goToStep(
+                      moves.length,
+                    )
+                  }
+                  className={[
+                    "flex min-w-[70px] flex-col items-center rounded-xl border px-3 py-2 transition",
+                    currentStep ===
+                    moves.length
+                      ? "border-green-500 bg-green-600 text-white shadow-lg shadow-green-500/20"
+                      : "border-white/10 bg-white/5 text-gray-300 hover:bg-white/10",
+                  ].join(" ")}
+                >
+                  <span className="text-[10px] uppercase tracking-wide opacity-70">
+                    End
+                  </span>
+
+                  <span className="text-sm font-bold">
+                    Solved
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {/* ================================================= */}
+            {/* PROGRESS                                         */}
+            {/* ================================================= */}
+
             <div className="mb-4">
               <div className="mb-1 flex justify-between text-xs text-gray-400">
                 <span>
-                  Move {Math.min(
-                    currentMove + 1,
-                    totalMoves,
-                  )}{" "}
-                  / {totalMoves}
+                  Step {currentStep} /{" "}
+                  {moves.length}
                 </span>
 
                 <span>
-                  {totalMoves > 0
-                    ? Math.round(
-                        (currentMove /
-                          totalMoves) *
-                          100,
-                      )
-                    : 0}
+                  {Math.round(
+                    progress,
+                  )}
                   %
                 </span>
               </div>
 
               <div className="h-1.5 overflow-hidden rounded-full bg-gray-700">
                 <div
-                  className="h-full rounded-full bg-blue-500 transition-all"
+                  className="h-full rounded-full bg-blue-500 transition-all duration-300"
                   style={{
-                    width: `${
-                      totalMoves > 0
-                        ? Math.min(
-                            (currentMove /
-                              totalMoves) *
-                              100,
-                            100,
-                          )
-                        : 0
-                    }%`,
+                    width: `${progress}%`,
                   }}
                 />
               </div>
             </div>
 
-            {/* Buttons */}
-            <div className="flex justify-center gap-3">
+            {/* ================================================= */}
+            {/* PREVIOUS / PLAY / NEXT                          */}
+            {/* ================================================= */}
+
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+
+              {/* PREVIOUS */}
               <button
                 type="button"
-                onClick={() =>
-                  setPlaying((value) => !value)
+                disabled={
+                  currentStep === 0
                 }
-                className="rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+                onClick={
+                  goPrevious
+                }
+                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
               >
-                {playing
-                  ? "Pause"
-                  : currentMove >= totalMoves
-                    ? "Replay"
-                    : "Play"}
+                ← Previous
               </button>
 
+              {/* PLAY / PAUSE */}
               <button
                 type="button"
-                onClick={() => {
-                  setPlaying(false);
-                  setCurrentMove(0);
-                  setActiveMove(
-                    moves.length > 0
-                      ? moves[0].notation
-                      : null,
-                  );
-
-                  setResetKey(
-                    (value) => value + 1,
-                  );
-                }}
-                className="rounded-xl border border-white/20 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+                onClick={
+                  playing
+                    ? () =>
+                        setPlaying(
+                          false,
+                        )
+                    : play
+                }
+                className="min-w-[110px] rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
               >
-                Reset
+                {playing
+                  ? "⏸ Pause"
+                  : isComplete
+                    ? "▶ Replay"
+                    : "▶ Play"}
+              </button>
+
+              {/* NEXT */}
+              <button
+                type="button"
+                disabled={
+                  currentStep >=
+                  moves.length
+                }
+                onClick={goNext}
+                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Next →
+              </button>
+
+              {/* RESET */}
+              <button
+                type="button"
+                onClick={reset}
+                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-gray-300 transition hover:bg-white/10"
+              >
+                ↻ Reset
               </button>
             </div>
 
-            {/* Solution */}
-            <div className="mt-4 max-h-20 overflow-auto rounded-xl bg-white/5 p-3">
-              <p className="text-center text-xs leading-6 text-gray-300">
+            {/* ================================================= */}
+            {/* SOLUTION STRING                                  */}
+            {/* ================================================= */}
+
+            <div className="mt-4 rounded-xl bg-white/5 p-3">
+              <p className="mb-1 text-center text-[10px] font-semibold uppercase tracking-wider text-gray-500">
+                Kociemba Solution
+              </p>
+
+              <p className="break-words text-center text-sm font-medium leading-6 text-gray-300">
                 {solution}
               </p>
             </div>
+
           </div>
         </div>
       )}
     </div>
   );
 }
-
