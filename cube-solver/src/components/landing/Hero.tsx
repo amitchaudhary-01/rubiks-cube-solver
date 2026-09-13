@@ -94,7 +94,7 @@ export default function Hero() {
               py-1.5
               text-xs
               font-medium
-              text-gray-600
+              text-green-500
               shadow-sm
               sm:px-4
               sm:py-2
@@ -107,17 +107,17 @@ export default function Hero() {
           <h1
             className="
               mt-5
-              max-w-2xl
+              max-w-3xl
               text-[2rem]
               font-bold
               leading-[1.12]
               tracking-tight
               text-gray-900
               sm:mt-6
-              sm:text-4xl
-              md:text-5xl
+              sm:text-2xl
+              md:text-3xl
               lg:text-[3.25rem]
-              xl:text-6xl
+              xl:text-4xl
             "
           >
             Solve your Rubik&apos;s Cube

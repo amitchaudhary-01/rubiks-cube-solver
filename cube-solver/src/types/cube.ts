@@ -14,13 +14,32 @@ export type FaceName =
   | "L"
   | "B";
 
+/*
+ * Every cube face contains exactly 9 stickers.
+ *
+ *  0 1 2
+ *  3 4 5
+ *  6 7 8
+ */
+export type CubeFace = [
+  CubeColor,
+  CubeColor,
+  CubeColor,
+  CubeColor,
+  CubeColor,
+  CubeColor,
+  CubeColor,
+  CubeColor,
+  CubeColor
+];
+
 export type CubeState = {
-  U: CubeColor[];
-  R: CubeColor[];
-  F: CubeColor[];
-  D: CubeColor[];
-  L: CubeColor[];
-  B: CubeColor[];
+  U: CubeFace;
+  R: CubeFace;
+  F: CubeFace;
+  D: CubeFace;
+  L: CubeFace;
+  B: CubeFace;
 };
 
 export interface SolveResponse {
@@ -28,4 +47,13 @@ export interface SolveResponse {
   solution: string[];
   moveCount: number;
   message: string;
-}
+};
+
+export const COLOR_TO_FACE: Record<CubeColor, FaceName> = {
+  W: "U",
+  R: "R",
+  G: "F",
+  Y: "D",
+  O: "L",
+  B: "B",
+};

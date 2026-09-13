@@ -1,85 +1,20 @@
-import type { CubeColor } from "./colorDetection";
-
-/*
- * --------------------------------
- * CUBE FACE NAMES
- * --------------------------------
- *
- * Kociemba uses:
- *
- * U = Up
- * R = Right
- * F = Front
- * D = Down
- * L = Left
- * B = Back
- */
-
-export type CubeFaceName =
-  | "U"
-  | "R"
-  | "F"
-  | "D"
-  | "L"
-  | "B";
-
-/*
- * --------------------------------
- * CUBE FACE
- * --------------------------------
- *
- * Every face contains exactly
- * 9 stickers:
- *
- *  0 1 2
- *  3 4 5
- *  6 7 8
- */
-
-export type CubeFace = [
-  CubeColor,
-  CubeColor,
-  CubeColor,
-  CubeColor,
-  CubeColor,
-  CubeColor,
-  CubeColor,
-  CubeColor,
-  CubeColor
-];
-
-/*
- * --------------------------------
- * COMPLETE CUBE STATE
- * --------------------------------
- *
- * A valid CubeState always contains
- * all six faces.
- */
-
-export type CubeState = {
-  U: CubeFace;
-  R: CubeFace;
-  F: CubeFace;
-  D: CubeFace;
-  L: CubeFace;
-  B: CubeFace;
-};
+import type {
+  CubeFace,
+  CubeState,
+  FaceName,
+} from "@/src/types/cube";
 
 /*
  * --------------------------------
  * FACE ORDER
  * --------------------------------
  *
- * This order is extremely important.
- *
- * It is also the order used by
- * Kociemba:
+ * Kociemba uses:
  *
  * U R F D L B
  */
 
-export const FACE_ORDER: CubeFaceName[] = [
+export const FACE_ORDER: FaceName[] = [
   "U",
   "R",
   "F",
@@ -94,10 +29,7 @@ export const FACE_ORDER: CubeFaceName[] = [
  * --------------------------------
  */
 
-export const FACE_NAMES: Record<
-  CubeFaceName,
-  string
-> = {
+export const FACE_NAMES: Record<FaceName, string> = {
   U: "Up",
   R: "Right",
   F: "Front",
@@ -110,12 +42,6 @@ export const FACE_NAMES: Record<
  * --------------------------------
  * EMPTY CUBE STATE
  * --------------------------------
- *
- * This is useful while scanning.
- *
- * Since CubeState itself represents
- * a completed cube, we use a separate
- * temporary type for the empty state.
  */
 
 export type EmptyCubeState = {
