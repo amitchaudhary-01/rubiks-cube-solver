@@ -126,15 +126,8 @@ export default function Hero() {
               className="
                 mt-1
                 block
-                bg-gradient-to-r
-                from-red-600
-                via-orange-500
-                via-yellow-500
-                via-green-500
-                via-blue-600
-                to-purple-600
-                bg-clip-text
-                text-transparent
+                text-gray-500
+                text-xl
               "
             >
               in a few simple steps.
