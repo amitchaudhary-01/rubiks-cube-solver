@@ -43,7 +43,7 @@ export default function SolverPage() {
         <button
           onClick={handleSolve}
           disabled={loading}
-          className="mb-6 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white disabled:opacity-50"
+          className="mb-6 rounded-lg bg-blue-600 px-6 py-3 justify-center items-center font-semibold text-white disabled:opacity-50"
         >
           {loading ? "Solving..." : "Solve Cube"}
         </button>
