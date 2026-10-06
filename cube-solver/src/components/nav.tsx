@@ -1,5 +1,6 @@
 "use client";
 
+import { Box } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -19,7 +20,7 @@ export default function Navbar() {
           className="flex items-center gap-2 text-lg font-semibold tracking-tight"
         >
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white">
-            R
+            <Box/>
           </div>
           <span>CubeSolver</span>
         </Link>

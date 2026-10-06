@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { Box } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -14,7 +15,7 @@ export default function Footer() {
               className="flex items-center gap-2 text-lg font-semibold tracking-tight text-white"
             >
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white">
-                R
+               <Box/>
               </div>
               <span>CubeSolver</span>
             </Link>
