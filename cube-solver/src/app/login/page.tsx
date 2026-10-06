@@ -80,6 +80,60 @@ export default function LoginPage() {
             </h2>
           </div>
 
+           <div className="pointer-events-none absolute -bottom-10 -right-20 z-20 h-72 w-72 sm:h-80 sm:w-80">
+            <svg
+              viewBox="0 0 300 300"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-full w-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.15)]"
+            >
+              <defs>
+                {/* Purple Glass Gradient */}
+                <linearGradient id="purpleGlass" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#CBB2FE" stopOpacity="0.85" />
+                  <stop offset="100%" stopColor="#8A60F2" stopOpacity="0.75" />
+                </linearGradient>
+
+                {/* Pink Cube Gradient */}
+                <linearGradient id="pinkCube" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#FFD1E8" stopOpacity="0.9" />
+                  <stop offset="100%" stopColor="#F5A3C7" stopOpacity="0.8" />
+                </linearGradient>
+
+                {/* Pearl White Sphere */}
+                <radialGradient id="pearlSphere" cx="35%" cy="35%" r="65%">
+                  <stop offset="0%" stopColor="#FFFFFF" />
+                  <stop offset="60%" stopColor="#E6E3FA" />
+                  <stop offset="100%" stopColor="#B8AFED" />
+                </radialGradient>
+
+                {/* Soft Gloss Gradient */}
+                <linearGradient id="whiteGloss" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.6" />
+                  <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.1" />
+                </linearGradient>
+              </defs>
+
+              {/* Main Cluster Container */}
+              <g transform="rotate(-12 150 150)">
+                {/* Back Cubes & Spheres */}
+                <rect x="70" y="50" width="75" height="75" rx="16" fill="url(#purpleGlass)" stroke="white" strokeWidth="1.5" strokeOpacity="0.4" />
+                <circle cx="170" cy="70" r="38" fill="url(#pearlSphere)" />
+                <rect x="150" y="80" width="85" height="85" rx="18" fill="url(#pinkCube)" stroke="white" strokeWidth="1.5" strokeOpacity="0.5" />
+
+                {/* Middle Translucent Layer */}
+                <rect x="90" y="110" width="80" height="80" rx="18" fill="url(#whiteGloss)" stroke="white" strokeWidth="2" strokeOpacity="0.6" />
+                <rect x="120" y="140" width="70" height="70" rx="16" fill="url(#purpleGlass)" stroke="white" strokeWidth="1.5" strokeOpacity="0.4" />
+
+                {/* Front Floating Cubes & Spheres */}
+                <rect x="50" y="145" width="65" height="65" rx="14" fill="url(#pinkCube)" stroke="white" strokeWidth="1.5" strokeOpacity="0.5" />
+                <circle cx="65" cy="115" r="28" fill="url(#pearlSphere)" />
+                <rect x="175" y="165" width="60" height="60" rx="14" fill="url(#whiteGloss)" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
+                <circle cx="140" cy="225" r="30" fill="url(#pearlSphere)" />
+              </g>
+            </svg>
+          </div>
+
           {/* Abstract 3D Cube Graphic Placeholder */}
           <div className="absolute -bottom-10 -right-10 flex h-52 w-52 items-center justify-center rounded-3xl bg-gradient-to-tr from-purple-400/30 to-pink-300/30 blur-sm">
             <div className="h-36 w-36 rotate-12 rounded-2xl bg-white/20 shadow-inner backdrop-blur-md" />
