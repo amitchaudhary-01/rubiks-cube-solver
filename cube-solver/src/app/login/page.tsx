@@ -36,7 +36,7 @@ export default function LoginPage() {
       router.push("/");
     } catch (err: any) {
       setError(err.message || "Something went wrong");
-    } finally {
+    } smFinally: {
       setLoading(false);
     }
   };
@@ -47,14 +47,18 @@ export default function LoginPage() {
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#A5A0F8] via-[#B8A2FB] to-[#7B73EE] p-4 sm:p-6 lg:p-8 font-sans">
+      {/* Decorative Blurs */}
       <div className="absolute -bottom-24 -right-24 h-[30rem] w-[30rem] rounded-full bg-white/20 blur-3xl pointer-events-none" />
       <div className="absolute -top-24 -left-24 h-[30rem] w-[30rem] rounded-full bg-purple-900/15 blur-3xl pointer-events-none" />
 
+      {/* Main Glass Card */}
       <div className="relative flex w-full max-w-4xl flex-col overflow-hidden rounded-[2.5rem] bg-white/30 p-3 shadow-2xl backdrop-blur-xl sm:flex-row">
         
-        {/* Left Side: Brand Panel */}
-        <div className="relative flex min-h-[300px] w-full flex-col justify-between overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#8072E6] via-[#7463E4] to-[#6C5CE7] p-8 text-white sm:w-5/12 sm:min-h-[560px]">
-          <div className="z-10 flex items-center justify-between">
+        {/* Left Side Panel */}
+        <div className="relative flex min-h-[340px] w-full flex-col justify-between overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#8072E6] via-[#7463E4] to-[#6C5CE7] p-8 text-white sm:w-5/12 sm:min-h-[560px]">
+          
+          {/* Logo */}
+          <div className="z-10 flex items-center gap-2.5">
             <Link href="/" className="flex items-center gap-2.5 transition transform hover:scale-105">
               <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-md shadow-inner border border-white/20">
                 <Box className="h-5 w-5 text-white" />
@@ -63,102 +67,72 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          <div className="z-10 my-auto py-6">
+          {/* Heading */}
+          <div className="z-10 my-auto py-6 pr-6">
             <span className="inline-block rounded-full bg-white/15 px-3 py-1 text-xs font-medium tracking-wide text-white/90 backdrop-blur-md mb-3">
               Welcome Back
             </span>
             <h2 className="text-2xl font-bold leading-snug text-white sm:text-3xl tracking-tight">
-              Continue Your Journey in 3D Solving
+              Continue Your Journey
             </h2>
             <p className="mt-2 text-xs text-white/75 font-light leading-relaxed">
-              Sign in to access your saved algorithms, custom themes, and personal best records.
+              Sign in to access your saved algorithms and speedcubing records.
             </p>
           </div>
 
-          <div className="z-10 flex items-center rounded-2xl bg-black/10 p-1.5 backdrop-blur-md border border-white/10">
-            <div className="w-full text-center py-2 text-xs font-semibold bg-white text-[#6C5CE7] rounded-xl shadow-md">
-              Sign In
-            </div>
-            <Link
-              href="/register"
-              className="w-full text-center py-2 text-xs font-semibold text-white/80 hover:text-white transition"
-            >
-              Sign Up
-            </Link>
-          </div>
-
-          {/* Graphic Artwork */}
+          {/* Graphical SVG Elements */}
           <div className="pointer-events-none absolute -bottom-10 -right-20 z-0 h-80 w-80">
-            <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.2)]">
-              <defs>
-                <linearGradient id="purpleGlass" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#CBB2FE" stopOpacity="0.85" />
-                  <stop offset="100%" stopColor="#8A60F2" stopOpacity="0.75" />
-                </linearGradient>
-                <linearGradient id="pinkCube" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#FFD1E8" stopOpacity="0.9" />
-                  <stop offset="100%" stopColor="#F5A3C7" stopOpacity="0.8" />
-                </linearGradient>
-                <radialGradient id="pearlSphere" cx="35%" cy="35%" r="65%">
-                  <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="60%" stopColor="#E6E3FA" />
-                  <stop offset="100%" stopColor="#B8AFED" />
-                </radialGradient>
-                <linearGradient id="whiteGloss" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.6" />
-                  <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.1" />
-                </linearGradient>
-              </defs>
+            <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-full opacity-40">
               <g transform="rotate(-12 150 150)">
-                <rect x="70" y="50" width="75" height="75" rx="16" fill="url(#purpleGlass)" stroke="white" strokeWidth="1.5" strokeOpacity="0.4" />
-                <circle cx="170" cy="70" r="38" fill="url(#pearlSphere)" />
-                <rect x="150" y="80" width="85" height="85" rx="18" fill="url(#pinkCube)" stroke="white" strokeWidth="1.5" strokeOpacity="0.5" />
-                <rect x="90" y="110" width="80" height="80" rx="18" fill="url(#whiteGloss)" stroke="white" strokeWidth="2" strokeOpacity="0.6" />
-                <rect x="120" y="140" width="70" height="70" rx="16" fill="url(#purpleGlass)" stroke="white" strokeWidth="1.5" strokeOpacity="0.4" />
-                <rect x="50" y="145" width="65" height="65" rx="14" fill="url(#pinkCube)" stroke="white" strokeWidth="1.5" strokeOpacity="0.5" />
-                <circle cx="65" cy="115" r="28" fill="url(#pearlSphere)" />
-                <rect x="175" y="165" width="60" height="60" rx="14" fill="url(#whiteGloss)" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
-                <circle cx="140" cy="225" r="30" fill="url(#pearlSphere)" />
+                <rect x="70" y="50" width="75" height="75" rx="16" fill="white" fillOpacity="0.2" />
+                <circle cx="170" cy="70" r="38" fill="white" fillOpacity="0.3" />
+                <rect x="150" y="80" width="85" height="85" rx="18" fill="white" fillOpacity="0.15" />
+                <rect x="90" y="110" width="80" height="80" rx="18" fill="white" fillOpacity="0.25" />
               </g>
             </svg>
           </div>
 
-          <div className="z-10 mt-4 text-[11px] text-white/50 font-light">
-            © {new Date().getFullYear()} Cube Solver Inc. All rights reserved.
+          {/* Curved Notch Switcher Tab (Exact Design from Screenshot) */}
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 z-30 hidden sm:flex flex-col items-end">
+            {/* LOGIN Tab (Active - Connected seamlessly to right panel) */}
+            <div className="relative flex items-center bg-white px-6 py-3 font-extrabold text-xs tracking-wider text-[#6C5CE7] shadow-[-4px_0_12px_rgba(0,0,0,0.06)] rounded-l-full">
+              {/* Concave Corner Top */}
+              <div className="absolute -top-4 right-0 h-4 w-4 bg-white [clip-path:polygon(100%_0,0_100%,100%_100%)] pointer-events-none" />
+              <span>LOGIN</span>
+              {/* Concave Corner Bottom */}
+              <div className="absolute -bottom-4 right-0 h-4 w-4 bg-white [clip-path:polygon(100%_100%,0_0,100%_0)] pointer-events-none" />
+            </div>
+
+            {/* SIGN UP Tab (Inactive Link) */}
+            <Link
+              href="/register"
+              className="mt-6 pr-6 text-xs font-semibold tracking-wider text-white/70 hover:text-white transition uppercase"
+            >
+              SIGN UP
+            </Link>
+          </div>
+
+          <div className="z-10 text-[11px] text-white/50 font-light">
+            © {new Date().getFullYear()} Cube Solver Inc.
           </div>
         </div>
 
-        {/* Right Side: Form Panel */}
+        {/* Right Side Form Panel */}
         <div className="flex w-full flex-col justify-center rounded-[2rem] bg-white p-6 sm:w-7/12 sm:p-10 shadow-sm">
           <div className="mx-auto w-full max-w-sm">
+            
+            {/* Mobile Tab Switcher */}
+            <div className="flex sm:hidden justify-center gap-6 mb-6 border-b pb-3">
+              <span className="font-bold text-[#6C5CE7] border-b-2 border-[#6C5CE7] pb-1 text-sm">LOGIN</span>
+              <Link href="/register" className="font-medium text-slate-400 text-sm">SIGN UP</Link>
+            </div>
+
             <div className="text-center">
-              <h1 className="text-2xl font-extrabold tracking-tight text-slate-800">Welcome Back</h1>
-              <p className="mt-1 text-xs text-slate-400">Enter your credentials to access your account</p>
+              <h1 className="text-2xl font-extrabold tracking-tight text-slate-800">LOGIN</h1>
+              <p className="mt-1 text-xs text-slate-400">Enter your credentials to continue</p>
             </div>
 
-            <div className="mt-6">
-              <button
-                type="button"
-                onClick={handleGoogleLogin}
-                className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-medium text-slate-600 transition hover:bg-slate-50 hover:border-slate-300 hover:shadow-sm"
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-                  <path fill="#4285F4" d="M21.35 12.27c0-.72-.06-1.42-.18-2.09H12v3.95h5.23a4.47 4.47 0 0 1-1.94 2.93v2.44h3.14c1.84-1.7 2.92-4.2 2.92-7.23Z" />
-                  <path fill="#34A853" d="M12 21.5c2.63 0 4.84-.87 6.45-2.36l-3.14-2.44c-.87.58-1.98.93-3.31.93-2.54 0-4.7-1.72-5.47-4.03H3.29v2.52A9.74 9.74 0 0 0 12 21.5Z" />
-                  <path fill="#FBBC05" d="M6.53 13.6A5.85 5.85 0 0 1 6.22 12c0-.56.11-1.1.31-1.6V7.88H3.29A9.74 9.74 0 0 0 2.25 12c0 1.57.38 3.05 1.04 4.12l3.24-2.52Z" />
-                  <path fill="#EA4335" d="M12 6.38c1.43 0 2.71.49 3.72 1.45l2.79-2.79C16.84 3.47 14.63 2.5 12 2.5a9.74 9.74 0 0 0-8.71 5.38l3.24 2.52C7.3 8.1 9.46 6.38 12 6.38Z" />
-                </svg>
-                Sign in with Google
-              </button>
-            </div>
-
-            <div className="my-5 flex items-center gap-3">
-              <div className="h-px flex-1 bg-slate-100" />
-              <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">OR</span>
-              <div className="h-px flex-1 bg-slate-100" />
-            </div>
-
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} className="mt-8 space-y-5">
               {error && (
                 <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-center text-xs text-red-600">
                   {error}
@@ -168,9 +142,8 @@ export default function LoginPage() {
               <div className="group relative border-b border-slate-200 focus-within:border-[#7B73EE] transition">
                 <Mail className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#7B73EE] transition" size={16} />
                 <input
-                  id="email"
                   type="email"
-                  placeholder="Email Address"
+                  placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -181,7 +154,6 @@ export default function LoginPage() {
               <div className="group relative border-b border-slate-200 focus-within:border-[#7B73EE] transition">
                 <Lock className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#7B73EE] transition" size={16} />
                 <input
-                  id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   value={password}
@@ -198,8 +170,8 @@ export default function LoginPage() {
                 </button>
               </div>
 
-              <div className="text-right">
-                <Link href="/forgot-password" className="text-xs text-slate-400 hover:text-[#7B73EE] transition">
+              <div className="flex items-center justify-between text-xs">
+                <Link href="/forgot-password" className="text-slate-400 hover:text-[#7B73EE] transition">
                   Forgot Password?
                 </Link>
               </div>
@@ -207,19 +179,32 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-[#7B73EE] py-3 text-sm font-semibold text-white shadow-md transition hover:bg-[#6C5CE7] hover:shadow-lg disabled:opacity-60"
+                className="w-full rounded-full bg-[#7B73EE] py-3 text-sm font-bold text-white shadow-md transition hover:bg-[#6C5CE7] hover:shadow-lg disabled:opacity-60 flex items-center justify-center gap-2"
               >
                 {loading && <RotateCw size={16} className="animate-spin" />}
-                {loading ? "Signing in..." : "Log In"}
+                LOGIN
               </button>
             </form>
 
-            <p className="mt-6 text-center text-xs text-slate-500">
-              Don't have an account?{" "}
-              <Link href="/register" className="font-semibold text-[#7B73EE] hover:underline transition">
-                Sign Up
-              </Link>
-            </p>
+            <div className="my-6 flex items-center gap-3">
+              <div className="h-px flex-1 bg-slate-100" />
+              <span className="text-[11px] font-medium text-slate-400">Or Login With</span>
+              <div className="h-px flex-1 bg-slate-100" />
+            </div>
+
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-medium text-slate-600 transition hover:bg-slate-50"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M21.35 12.27c0-.72-.06-1.42-.18-2.09H12v3.95h5.23a4.47 4.47 0 0 1-1.94 2.93v2.44h3.14c1.84-1.7 2.92-4.2 2.92-7.23Z" />
+                <path fill="#34A853" d="M12 21.5c2.63 0 4.84-.87 6.45-2.36l-3.14-2.44c-.87.58-1.98.93-3.31.93-2.54 0-4.7-1.72-5.47-4.03H3.29v2.52A9.74 9.74 0 0 0 12 21.5Z" />
+                <path fill="#FBBC05" d="M6.53 13.6A5.85 5.85 0 0 1 6.22 12c0-.56.11-1.1.31-1.6V7.88H3.29A9.74 9.74 0 0 0 2.25 12c0 1.57.38 3.05 1.04 4.12l3.24-2.52Z" />
+                <path fill="#EA4335" d="M12 6.38c1.43 0 2.71.49 3.72 1.45l2.79-2.79C16.84 3.47 14.63 2.5 12 2.5a9.74 9.74 0 0 0-8.71 5.38l3.24 2.52C7.3 8.1 9.46 6.38 12 6.38Z" />
+              </svg>
+              Google
+            </button>
           </div>
         </div>
 
