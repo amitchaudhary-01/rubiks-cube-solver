@@ -97,10 +97,10 @@ export default function LoginPage() {
             {/* LOGIN Tab (Active - Connected seamlessly to right panel) */}
             <div className="relative flex items-center bg-white px-6 py-3 font-extrabold text-xs tracking-wider text-[#6C5CE7] shadow-[-4px_0_12px_rgba(0,0,0,0.06)] rounded-l-full">
               {/* Concave Corner Top */}
-              <div className="absolute -top-4 right-0 h-4 w-4 bg-white [clip-path:polygon(100%_0,0_100%,100%_100%)] pointer-events-none" />
+              <div className="absolute rounded-r-lg -top-4 right-0 h-4 w-4 bg-[#6C5CE7] [clip-path:polygon(100%_0,0_100%,100%_100%)] pointer-events-none" />
               <span>LOGIN</span>
               {/* Concave Corner Bottom */}
-              <div className="absolute -bottom-4 right-0 h-4 w-4 bg-white [clip-path:polygon(100%_100%,0_0,100%_0)] pointer-events-none" />
+              <div className="absolute rounded-b-lg -bottom-4 right-0 h-4 w-4 bg-[#6C5CE7] [clip-path:polygon(100%_100%,0_0,100%_0)] pointer-events-none" />
             </div>
 
             {/* SIGN UP Tab (Inactive Link) */}

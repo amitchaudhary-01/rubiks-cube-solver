@@ -81,7 +81,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Heading */}
-          <div className="z-10 my-auto py-6 pr-6">
+          <div className="z-10 mb-16 my-auto py-1 pr-6">
             <span className="inline-block rounded-full bg-white/15 px-3 py-1 text-xs font-medium tracking-wide text-white/90 backdrop-blur-md mb-3">
               Start For Free
             </span>
@@ -105,38 +105,25 @@ export default function RegisterPage() {
             </svg>
           </div>
 
-          {/* Curved Notch Switcher Tab (Smooth Concave Inverted Curves) */}
-<div className="absolute right-0 top-1/2 -translate-y-1/2 z-30 hidden sm:flex flex-col items-end">
-  
-  {/* Active LOGIN Tab - Seamlessly merged into the white right form panel */}
-  <div className="relative flex items-center bg-white pl-7 pr-6 py-3 font-extrabold text-xs tracking-widest text-[#6C5CE7] rounded-l-full shadow-[-6px_0_15px_rgba(0,0,0,0.05)]">
-    
-    {/* Smooth Inverted Curve Top */}
-    <div className="absolute right-0 -top-6 w-6 h-6 text-white pointer-events-none">
-      <svg className="w-full h-full fill-current" viewBox="0 0 24 24">
-        <path d="M 24 24 C 24 10.745 13.255 0 0 0 L 24 0 Z" />
-      </svg>
-    </div>
+          {/* Curved Notch Switcher Tab (Exact Design from Screenshot) */}
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 z-30 hidden sm:flex flex-col items-end">
+            {/* LOGIN Tab (Inactive Link) */}
+            <Link
+              href="/login"
+              className="mb-6 pr-6 text-xs font-semibold tracking-wider text-white/70 hover:text-white transition uppercase"
+            >
+              LOGIN
+            </Link>
 
-    <span>LOGIN</span>
-
-    {/* Smooth Inverted Curve Bottom */}
-    <div className="absolute right-0 -bottom-6 w-6 h-6 text-white pointer-events-none">
-      <svg className="w-full h-full fill-current" viewBox="0 0 24 24">
-        <path d="M 24 0 C 24 13.255 13.255 24 0 24 L 24 24 Z" />
-      </svg>
-    </div>
-  </div>
-
-  {/* Inactive SIGN IN / SIGN UP Link */}
-  <Link
-    href="/register"
-    className="mt-6 pr-6 text-xs font-bold tracking-widest text-white/70 hover:text-white transition-colors duration-200 uppercase"
-  >
-    SIGN IN
-  </Link>
-
-</div>
+            {/* SIGN UP Tab (Active - Connected seamlessly to right panel) */}
+            <div className="relative flex items-center bg-white px-6 py-3 font-extrabold text-xs tracking-wider text-[#6C5CE7] shadow-[-4px_0_12px_rgba(0,0,0,0.06)] rounded-l-full">
+              {/* Concave Corner Top */}
+              <div className="absolute rounded-r-lg -top-4 right-0 h-4 w-4 bg-[#6C5CE7][clip-path:polygon(100%_0,0_100%,100%_100%)] pointer-events-none" />
+              <span>SIGN UP</span>
+              {/* Concave Corner Bottom */}
+              <div className="absolute rounded-b-lg -bottom-4 right-0 h-4 w-4 bg-[#6C5CE7] [clip-path:polygon(100%_100%,0_0,100%_0)] pointer-events-none" />
+            </div>
+          </div>
 
           <div className="z-10 text-[11px] text-white/50 font-light">
             © {new Date().getFullYear()} Cube Solver Inc.
