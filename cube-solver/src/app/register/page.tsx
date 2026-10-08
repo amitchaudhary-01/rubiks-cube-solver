@@ -64,11 +64,11 @@ export default function RegisterPage() {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:5000/api/auth/google";
+    window.location.href = "https://www.google.com";
   };
 
   const handleFacebookLogin = () => {
-    window.location.href = "http://localhost:5000/api/auth/facebook";
+    window.location.href = "https://www.facebook.com";
   };
 
   return (
