@@ -3,7 +3,16 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Eye, EyeOff, RotateCw, Box, Mail, Lock, User, CheckCircle2 } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  RotateCw,
+  Box,
+  Mail,
+  Lock,
+  User,
+  CheckCircle2,
+} from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -58,6 +67,10 @@ export default function RegisterPage() {
     window.location.href = "http://localhost:5000/api/auth/google";
   };
 
+  const handleFacebookLogin = () => {
+    window.location.href = "http://localhost:5000/api/auth/facebook";
+  };
+
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#A5A0F8] via-[#B8A2FB] to-[#7B73EE] p-4 sm:p-6 lg:p-8 font-sans">
       {/* Decorative Blurs */}
@@ -66,17 +79,20 @@ export default function RegisterPage() {
 
       {/* Main Glass Card */}
       <div className="relative flex w-full max-w-4xl flex-col overflow-hidden rounded-[2.5rem] bg-white/30 p-3 shadow-2xl backdrop-blur-xl sm:flex-row">
-        
         {/* Left Side Panel */}
         <div className="relative flex min-h-[340px] w-full flex-col justify-between overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#8072E6] via-[#7463E4] to-[#6C5CE7] p-8 text-white sm:w-5/12 sm:min-h-[560px]">
-          
           {/* Logo */}
           <div className="z-10 flex items-center gap-2.5">
-            <Link href="/" className="flex items-center gap-2.5 transition transform hover:scale-105">
+            <Link
+              href="/"
+              className="flex items-center gap-2.5 transition transform hover:scale-105"
+            >
               <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-md shadow-inner border border-white/20">
                 <Box className="h-5 w-5 text-white" />
               </div>
-              <span className="font-bold tracking-wide text-white text-lg">Cube Solver</span>
+              <span className="font-bold tracking-wide text-white text-lg">
+                Cube Solver
+              </span>
             </Link>
           </div>
 
@@ -89,18 +105,54 @@ export default function RegisterPage() {
               Join Our 3D World
             </h2>
             <p className="mt-2 text-xs text-white/75 font-light leading-relaxed">
-              Create an account to track your cube solving records and connect with speedcubers.
+              Create an account to track your cube solving records and connect
+              with speedcubers.
             </p>
           </div>
 
           {/* Graphical SVG Elements */}
           <div className="pointer-events-none absolute -bottom-10 -right-20 z-0 h-80 w-80">
-            <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-full opacity-40">
+            <svg
+              viewBox="0 0 300 300"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-full w-full opacity-40"
+            >
               <g transform="rotate(-12 150 150)">
-                <rect x="70" y="50" width="75" height="75" rx="16" fill="white" fillOpacity="0.2" />
-                <circle cx="170" cy="70" r="38" fill="white" fillOpacity="0.3" />
-                <rect x="150" y="80" width="85" height="85" rx="18" fill="white" fillOpacity="0.15" />
-                <rect x="90" y="110" width="80" height="80" rx="18" fill="white" fillOpacity="0.25" />
+                <rect
+                  x="70"
+                  y="50"
+                  width="75"
+                  height="75"
+                  rx="16"
+                  fill="white"
+                  fillOpacity="0.2"
+                />
+                <circle
+                  cx="170"
+                  cy="70"
+                  r="38"
+                  fill="white"
+                  fillOpacity="0.3"
+                />
+                <rect
+                  x="150"
+                  y="80"
+                  width="85"
+                  height="85"
+                  rx="18"
+                  fill="white"
+                  fillOpacity="0.15"
+                />
+                <rect
+                  x="90"
+                  y="110"
+                  width="80"
+                  height="80"
+                  rx="18"
+                  fill="white"
+                  fillOpacity="0.25"
+                />
               </g>
             </svg>
           </div>
@@ -133,16 +185,26 @@ export default function RegisterPage() {
         {/* Right Side Form Panel */}
         <div className="flex w-full flex-col justify-center rounded-[2rem] bg-white p-6 sm:w-7/12 sm:p-10 shadow-sm">
           <div className="mx-auto w-full max-w-sm">
-            
             {/* Mobile Tab Switcher */}
             <div className="flex sm:hidden justify-center gap-6 mb-6 border-b pb-3">
-              <Link href="/login" className="font-medium text-slate-400 text-sm">LOGIN</Link>
-              <span className="font-bold text-[#6C5CE7] border-b-2 border-[#6C5CE7] pb-1 text-sm">SIGN UP</span>
+              <Link
+                href="/login"
+                className="font-medium text-slate-400 text-sm"
+              >
+                LOGIN
+              </Link>
+              <span className="font-bold text-[#6C5CE7] border-b-2 border-[#6C5CE7] pb-1 text-sm">
+                SIGN UP
+              </span>
             </div>
 
             <div className="text-center">
-              <h1 className="text-2xl font-extrabold tracking-tight text-slate-800">SIGN UP</h1>
-              <p className="mt-1 text-xs text-slate-400">Fill in your information to create an account</p>
+              <h1 className="text-2xl font-extrabold tracking-tight text-slate-800">
+                SIGN UP
+              </h1>
+              <p className="mt-1 text-xs text-slate-400">
+                Fill in your information to create an account
+              </p>
             </div>
 
             <form onSubmit={handleRegister} className="mt-6 space-y-4">
@@ -160,7 +222,10 @@ export default function RegisterPage() {
               )}
 
               <div className="group relative border-b border-slate-200 focus-within:border-[#7B73EE] transition">
-                <User className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#7B73EE] transition" size={16} />
+                <User
+                  className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#7B73EE] transition"
+                  size={16}
+                />
                 <input
                   type="text"
                   placeholder="Full Name"
@@ -172,7 +237,10 @@ export default function RegisterPage() {
               </div>
 
               <div className="group relative border-b border-slate-200 focus-within:border-[#7B73EE] transition">
-                <Mail className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#7B73EE] transition" size={16} />
+                <Mail
+                  className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#7B73EE] transition"
+                  size={16}
+                />
                 <input
                   type="email"
                   placeholder="Email"
@@ -184,7 +252,10 @@ export default function RegisterPage() {
               </div>
 
               <div className="group relative border-b border-slate-200 focus-within:border-[#7B73EE] transition">
-                <Lock className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#7B73EE] transition" size={16} />
+                <Lock
+                  className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#7B73EE] transition"
+                  size={16}
+                />
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
@@ -203,7 +274,10 @@ export default function RegisterPage() {
               </div>
 
               <div className="group relative border-b border-slate-200 focus-within:border-[#7B73EE] transition">
-                <Lock className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#7B73EE] transition" size={16} />
+                <Lock
+                  className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#7B73EE] transition"
+                  size={16}
+                />
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Confirm Password"
@@ -226,26 +300,51 @@ export default function RegisterPage() {
 
             <div className="my-5 flex items-center gap-3">
               <div className="h-px flex-1 bg-slate-100" />
-              <span className="text-[11px] font-medium text-slate-400">Or Register With</span>
+              <span className="text-[11px] font-medium text-slate-400">
+                Or Register With
+              </span>
               <div className="h-px flex-1 bg-slate-100" />
             </div>
 
-            <button
-              type="button"
-              onClick={handleGoogleLogin}
-              className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-medium text-slate-600 transition hover:bg-slate-50"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M21.35 12.27c0-.72-.06-1.42-.18-2.09H12v3.95h5.23a4.47 4.47 0 0 1-1.94 2.93v2.44h3.14c1.84-1.7 2.92-4.2 2.92-7.23Z" />
-                <path fill="#34A853" d="M12 21.5c2.63 0 4.84-.87 6.45-2.36l-3.14-2.44c-.87.58-1.98.93-3.31.93-2.54 0-4.7-1.72-5.47-4.03H3.29v2.52A9.74 9.74 0 0 0 12 21.5Z" />
-                <path fill="#FBBC05" d="M6.53 13.6A5.85 5.85 0 0 1 6.22 12c0-.56.11-1.1.31-1.6V7.88H3.29A9.74 9.74 0 0 0 2.25 12c0 1.57.38 3.05 1.04 4.12l3.24-2.52Z" />
-                <path fill="#EA4335" d="M12 6.38c1.43 0 2.71.49 3.72 1.45l2.79-2.79C16.84 3.47 14.63 2.5 12 2.5a9.74 9.74 0 0 0-8.71 5.38l3.24 2.52C7.3 8.1 9.46 6.38 12 6.38Z" />
-              </svg>
-              Google
-            </button>
+            <div>
+              <button
+                type="button"
+                onClick={handleGoogleLogin}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-medium text-slate-600 transition hover:bg-slate-50"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24">
+                  <path
+                    fill="#4285F4"
+                    d="M21.35 12.27c0-.72-.06-1.42-.18-2.09H12v3.95h5.23a4.47 4.47 0 0 1-1.94 2.93v2.44h3.14c1.84-1.7 2.92-4.2 2.92-7.23Z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 21.5c2.63 0 4.84-.87 6.45-2.36l-3.14-2.44c-.87.58-1.98.93-3.31.93-2.54 0-4.7-1.72-5.47-4.03H3.29v2.52A9.74 9.74 0 0 0 12 21.5Z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M6.53 13.6A5.85 5.85 0 0 1 6.22 12c0-.56.11-1.1.31-1.6V7.88H3.29A9.74 9.74 0 0 0 2.25 12c0 1.57.38 3.05 1.04 4.12l3.24-2.52Z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M12 6.38c1.43 0 2.71.49 3.72 1.45l2.79-2.79C16.84 3.47 14.63 2.5 12 2.5a9.74 9.74 0 0 0-8.71 5.38l3.24 2.52C7.3 8.1 9.46 6.38 12 6.38Z"
+                  />
+                </svg>
+                Google
+              </button>
+              <button
+                type="button"
+                onClick={handleFacebookLogin}
+                className="flex w-full items-center mt-4 justify-center gap-2 rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-medium text-slate-600 transition hover:bg-slate-50"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#1877F2">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                </svg>
+                Facebook
+              </button>
+            </div>
           </div>
         </div>
-
       </div>
     </main>
   );
