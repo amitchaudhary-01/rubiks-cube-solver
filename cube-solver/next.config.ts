@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export', // <-- This is mandatory to generate the static 'out' folder
+  // Make sure output: 'export' is NOT here!
   images: {
-    unoptimized: true, // Recommended for static exports
+    unoptimized: true,
   },
   typescript: {
     ignoreBuildErrors: true,
